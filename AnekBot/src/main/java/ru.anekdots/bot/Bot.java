@@ -7,6 +7,9 @@ import org.springframework.context.annotation.PropertySource;
 
 interface Bot {
 
+    String token = null;
+
+    String botname = null;
 
     String getBotUsername();
 
