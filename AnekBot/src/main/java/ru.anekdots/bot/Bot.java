@@ -7,14 +7,13 @@ import org.springframework.context.annotation.PropertySource;
 
 interface Bot {
 
-    String token = null;
+    String Token = null;
 
-    String botname = null;
+    String Botname = null;
 
     String getBotUsername();
 
     String getBotToken();
-
 
     void sendMessage(String text, long chatId);
 

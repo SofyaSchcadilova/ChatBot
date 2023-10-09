@@ -17,12 +17,12 @@ import java.util.Objects;
 public class TelegramBot extends TelegramLongPollingBot implements Bot{
 
 
-    String Name = botsdata.name;
+    String Botname = botsdata.name;
 
     String Token = botsdata.token;
     @Override
     public String getBotUsername() {
-        return Name;
+        return Botname;
     }
 
     @Override
