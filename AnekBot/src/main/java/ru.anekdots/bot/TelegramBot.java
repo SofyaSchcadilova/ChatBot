@@ -48,16 +48,6 @@ public class TelegramBot extends TelegramLongPollingBot implements Bot{
         Long chatId = update.getMessage().getChatId();
         String text = update.getMessage().getText();
 
-        switch (text) {
-            case ("/start"):
-                sendMessage(answers._start, chatId);
-                break;
-            case ("/help"):
-                sendMessage(answers._help, chatId);
-                break;
-            default:
-                sendMessage("Вы ввели: " + text, chatId);
-                break;
-        }
+        sendMessage(MainClass.think(text), chatId);
     }
 }
