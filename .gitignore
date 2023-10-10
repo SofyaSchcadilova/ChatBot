@@ -36,7 +36,3 @@ build/
 
 ### Mac OS ###
 .DS_Store
-
-
-### Bots token ###
-src/main/java/ru.anekdots/resourses/botsdata.java
