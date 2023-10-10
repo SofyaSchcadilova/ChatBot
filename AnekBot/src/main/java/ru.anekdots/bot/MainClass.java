@@ -4,16 +4,17 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import ru.anekdots.resourses.answers;
-
+// Основной класс логики
 public class MainClass {
 
     TelegramBot bot = new TelegramBot();
-
+    // Запуск бота
     public void init() throws TelegramApiException {
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
         telegramBotsApi.registerBot(bot);
     }
 
+    // Обработка запроса пользователя
     static String think(String rawText) {
         String answer;
         switch (rawText) {
