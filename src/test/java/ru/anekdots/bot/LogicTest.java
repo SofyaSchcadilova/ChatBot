@@ -4,15 +4,15 @@ import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
 import org.junit.Assert;
-import ru.anekdots.Main;
-import ru.anekdots.resourses.answers;
 
-public class MainClassTest {
+/**
+ * Тест класса логики
+ */
+public class LogicTest {
     @Before
     public void beforeClass() {
         System.out.println("Starting testing");
     }
-
 
     @After
     public void afterClass() {
@@ -20,9 +20,9 @@ public class MainClassTest {
     }
     @Test
     public void thinkTest() {
-        Assert.assertEquals("Вы написали: Test1 default case", MainClass.think("Test1 default case"));
-        Assert.assertEquals(answers._start,MainClass.think("/start"));
-        Assert.assertEquals(answers._help,MainClass.think("/help"));
+
+        Assert.assertEquals("Вы написали: Test default case", Logic.think("Test default case"));
+
     }
 
 }

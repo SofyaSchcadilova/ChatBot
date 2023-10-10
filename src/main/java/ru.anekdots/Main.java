@@ -1,11 +1,14 @@
 package ru.anekdots;
 
+import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.anekdots.bot.MainClass;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+import ru.anekdots.bot.TelegramBot;
 
 public class Main {
+
     public static void main(String[] args) throws TelegramApiException {
-        MainClass cursession = new MainClass();
-        cursession.init();
+        TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
+        telegramBotsApi.registerBot(new TelegramBot());
     }
 }

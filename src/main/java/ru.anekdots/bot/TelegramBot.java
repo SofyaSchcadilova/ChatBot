@@ -1,36 +1,50 @@
 package ru.anekdots.bot;
 
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.anekdots.resourses.answers;
 import ru.anekdots.resourses.botsdata;
 
-import java.util.Objects;
-
-// Класс телеграм бота
+/***
+ * Класс телеграм бота
+ *
+  */
 public class TelegramBot extends TelegramLongPollingBot implements Bot{
 
+    /**
+     * Подключение основной логики
+     */
 
-    String Botname = botsdata.name;
-
-    String Token = botsdata.token;
+    private Logic logic = new Logic(this);
+    /**
+     * Имя бота
+     */
+    private String Botname = botsdata.NAME;
+    /**
+     * Ключ/Токен бота
+     */
+    private String Token = botsdata.TOKEN;
+    /**
+     * Получить имя бота
+     */
     @Override
     public String getBotUsername() {
         return Botname;
     }
-
+    /**
+     * Получить токен бота
+     */
     @Override
     public String getBotToken() {
         return Token;
     }
 
-
+    /**
+     * Отправка сообщения
+     * @param text текст сообщения
+     * @param chatId айди чата
+     */
     @Override
     public void sendMessage(String text, long chatId) {
         SendMessage message = new SendMessage();
@@ -43,12 +57,14 @@ public class TelegramBot extends TelegramLongPollingBot implements Bot{
             throw new RuntimeException(e);
         }
     }
-
+    /**
+     * Действия бота при получении
+     */
     @Override
     public void onUpdateReceived(Update update) {
         Long chatId = update.getMessage().getChatId();
         String text = update.getMessage().getText();
 
-        sendMessage(MainClass.think(text), chatId);
+        sendMessage(logic.think(text), chatId);
     }
 }

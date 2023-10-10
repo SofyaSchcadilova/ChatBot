@@ -1,8 +1,15 @@
 package ru.anekdots.resourses;
 
-// Данные для авторизации бота
+/**
+ * Данные для авторизации бота
+ */
 public class botsdata {
-
-    final static public String token = "5805156564:AAEbJpeZqwBcWchldQWVYcje8t-D3hqAdiY";
-    final static public String name = "Teledawn_2bot";
+    /**
+     * Токен бота
+     */
+    final static public String TOKEN = "5805156564:AAEbJpeZqwBcWchldQWVYcje8t-D3hqAdiY";
+    /**
+     * Имя бота
+     */
+    final static public String NAME = "Teledawn_2bot";
 }
