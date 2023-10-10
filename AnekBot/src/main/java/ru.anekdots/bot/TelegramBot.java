@@ -13,7 +13,7 @@ import ru.anekdots.resourses.botsdata;
 
 import java.util.Objects;
 
-
+// Класс телеграм бота
 public class TelegramBot extends TelegramLongPollingBot implements Bot{
 
 
@@ -29,6 +29,7 @@ public class TelegramBot extends TelegramLongPollingBot implements Bot{
     public String getBotToken() {
         return Token;
     }
+
 
     @Override
     public void sendMessage(String text, long chatId) {

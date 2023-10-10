@@ -1,6 +1,7 @@
 package ru.anekdots.resourses;
-
+// Ответы бота
 public class answers {
+
     final public static String _start = """
                         Привет! Я бот с анекдотами, для справки нажмите /help
 

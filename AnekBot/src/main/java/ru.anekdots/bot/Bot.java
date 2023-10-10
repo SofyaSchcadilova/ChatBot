@@ -4,12 +4,9 @@ import lombok.Data;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-
+// Интерфейс всех ботов
 interface Bot {
 
-    String Token = null;
-
-    String Botname = null;
 
     String getBotUsername();
 
