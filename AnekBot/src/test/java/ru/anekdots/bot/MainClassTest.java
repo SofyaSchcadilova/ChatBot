@@ -12,6 +12,8 @@ public class MainClassTest {
     public void beforeClass() {
         System.out.println("Starting testing");
     }
+
+    
     @After
     public void afterClass() {
         System.out.println("Tests finished");
