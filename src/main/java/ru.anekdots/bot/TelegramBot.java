@@ -6,6 +6,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.anekdots.resourses.botsdata;
 
+import java.sql.SQLException;
+
 /***
  * Класс телеграм бота
  *
@@ -16,7 +18,7 @@ public class TelegramBot extends TelegramLongPollingBot implements Bot{
      * Подключение основной логики
      */
 
-    private Logic logic = new Logic(this);
+    private Logic logic;
     /**
      * Имя бота
      */
@@ -25,6 +27,11 @@ public class TelegramBot extends TelegramLongPollingBot implements Bot{
      * Ключ/Токен бота
      */
     private String Token = botsdata.TOKEN;
+
+    public TelegramBot() throws SQLException, ClassNotFoundException {
+        logic = new Logic(this);
+    }
+
     /**
      * Получить имя бота
      */
