@@ -1,4 +1,4 @@
-package ru.anekdots.databasecontroller;
+package ru.anekdots.databasecontroller.DB_Tables;
 
 import java.sql.SQLException;
 
@@ -18,10 +18,5 @@ public interface TableOperations {
      */
     void createForeignKey() throws SQLException;
 
-    /**
-     *  Создание дополнительных правил для значений полей таблицы
-     * @throws SQLException
-     */
-    void createExtraConstraints()throws  SQLException;
 
 }

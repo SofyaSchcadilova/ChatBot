@@ -1,4 +1,4 @@
-package ru.anekdots.databasecontroller;
+package ru.anekdots.databasecontroller.models;
 
 import java.util.Objects;
 
@@ -11,6 +11,7 @@ public class BaseModel {
      */
     protected int id;
 
+
     public long getId(){
         return id;
     }
@@ -18,7 +19,7 @@ public class BaseModel {
     public void setId(int id) {
         this.id = id;
     }
-    public BaseModel(){};
+
 
     public BaseModel(int id){
         this.id = id;

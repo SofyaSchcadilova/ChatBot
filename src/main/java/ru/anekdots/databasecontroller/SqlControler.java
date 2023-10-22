@@ -1,7 +1,11 @@
 package ru.anekdots.databasecontroller;
 
 
+import ru.anekdots.databasecontroller.models.JokesModel;
+
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Класс общения базы данных с основной логикой
@@ -18,7 +22,7 @@ public class SqlControler {
         System.out.println(ROOT);
         try {
             Class.forName(DB_Driver); //Проверяем наличие JDBC драйвера для работы с БД
-            connection = DriverManager.getConnection(DB_URL);//соединениесБД
+            connection = DriverManager.getConnection(DB_URL);//соединение с БД
             System.out.println("Соединение с СУБД выполнено.");
 
 
@@ -44,8 +48,34 @@ public class SqlControler {
         }
     }
 
-    public void createTable(){
+    public void addJoke(String JokeText){
 
     }
 
+    public static Connection getConnection() throws SQLException{
+        return DriverManager.getConnection(DB_URL);
+    }
+
+
+
+    public void createTables(){
+
+    }
+
+    public void addUser(String Name, int TelegramId, int DiscordId){
+
+    }
+
+    public JokesModel getJokeById(int id) {
+        return new JokesModel(1,"Колобок повесился");
+    }
+    public int findJokeByText(String text) {
+        return 0;
+    }
+    public List<JokesModel> getJokes(int count){
+        List<JokesModel> ans = new ArrayList<JokesModel>();
+        ans.add(new JokesModel(1,"Колобок повесился"));
+        ans.add(new JokesModel(2,"Колобок повесился (тип дважды сказананя шутка в два раза смешнее"));
+        return ans;
+    }
 }

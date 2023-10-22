@@ -1,26 +1,25 @@
 package ru.anekdots.databasecontroller.models;
 
-import ru.anekdots.databasecontroller.BaseModel;
-import ru.anekdots.databasecontroller.TableOperations;
-
-import java.sql.SQLException;
-
 /**
  *  Модель шуток
  */
-public class JokesModel extends BaseModel implements TableOperations {
-    @Override
-    public void createTable() throws SQLException {
+public class JokesModel extends BaseModel{
 
+    String JokeText;
+    int rates;
+    int rate;
+
+    public JokesModel(int id){
+        super(id);
+        rate = 0;
+        rates = 0;
     }
 
-    @Override
-    public void createForeignKey() throws SQLException {
-
+    public JokesModel(int id, String text){
+        super(id);
+        rate = 0;
+        rates = 0;
+        JokeText = text;
     }
 
-    @Override
-    public void createExtraConstraints() throws SQLException {
-
-    }
 }
