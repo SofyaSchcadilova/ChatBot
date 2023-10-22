@@ -4,6 +4,7 @@ import ru.anekdots.databasecontroller.SqlControler;
 
 import java.io.Closeable;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -13,6 +14,7 @@ public class BaseTable implements Closeable {
      */
     Connection connection;
 
+    Statement statement;
     String tableName;
 
     BaseTable(String tableName) throws SQLException {
@@ -26,6 +28,7 @@ public class BaseTable implements Closeable {
         try {
             if (connection != null && !connection.isClosed())
                 connection.close();
+                System.out.println(tableName+" закрыта");
         } catch (SQLException e){
             System.out.println("Ошибка закрытия Sql соединения " + tableName);
         }
@@ -47,22 +50,26 @@ public class BaseTable implements Closeable {
      * @param description описание запроса (для логов)
      * @throws SQLException
      */
-    void executeSqlStatement(String sql, String description) throws SQLException {
+    ResultSet executeSqlStatement(String sql, String description) throws SQLException {
+        if (statement!=null && !statement.isClosed()){
+            statement.close();
+        }
         reopenConnection();
-        Statement statement = connection.createStatement();
+        statement = connection.createStatement();
         statement.execute(sql);
-        statement.close();
+        ResultSet ans = statement.getResultSet();
         if (description != null){
             System.out.println(description);
         }
+        return ans;
     }
     /**
      * Выполнить sql запрос
      * @param sql сам запрос
      * @throws SQLException
      */
-    void executeSqlStatement(String sql) throws SQLException {
-        executeSqlStatement(sql, null);
+    ResultSet executeSqlStatement(String sql) throws SQLException {
+        return executeSqlStatement(sql, null);
     };
 
 
