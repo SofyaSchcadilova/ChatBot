@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * Общая модель для баз данных
  */
-public class BaseModel {
+public abstract class BaseModel {
     /**
      * Уникальный индификатор записей
      */
@@ -37,4 +37,6 @@ public class BaseModel {
     public int hashCode(){
         return Objects.hashCode(id);
     }
+
+
 }
