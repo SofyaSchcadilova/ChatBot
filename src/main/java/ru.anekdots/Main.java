@@ -12,6 +12,7 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) throws TelegramApiException, SQLException, ClassNotFoundException {
 
+        
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
         telegramBotsApi.registerBot(new TelegramBot());
     }

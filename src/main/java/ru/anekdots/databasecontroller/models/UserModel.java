@@ -11,6 +11,8 @@ public class UserModel extends BaseModel{
 
     String SomeInformation;
 
+    int State;
+
     public UserModel(int id){
         super(id);
     }
