@@ -40,9 +40,10 @@ public class Logic {
         userWithJoke.add(chatID);
     }
 
+
     /**
      * Обработка запроса пользователя
-     * @param rawText "сырой" текст, userId временно
+     * @param rawText "сырой" текст
       */
 
     String think(String rawText, Long userId) {
@@ -74,6 +75,9 @@ public class Logic {
             case ("предложить анекдот"):
                 addUserWithJoke(userId);
                 answer = "Введите анекдот";
+                break;
+            case ("/getAll"):
+                answer = DB.getAllJokes();
                 break;
             default:
                 answer = "Я не знаю такую команду :(\nВведи /help для справки";

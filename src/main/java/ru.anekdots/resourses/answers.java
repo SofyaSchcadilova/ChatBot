@@ -1,4 +1,11 @@
 package ru.anekdots.resourses;
+
+import ru.anekdots.databasecontroller.SqlControler;
+import ru.anekdots.databasecontroller.models.JokesModel;
+
+import java.sql.SQLException;
+import java.util.List;
+
 /**
  *  Ответы бота /
  *  Строки, которыми отвечает бот
@@ -39,5 +46,6 @@ public class answers {
                         Есть анекдоты в формате вопроса, нажми на кнопку "Игра", я отправлю первую часть анекдота (вопрос), а тебе нужно отгадать ответ
                         
                         После отправки анекдота появляется кнопка "Оценить" - оцени анекдот!!!""";
+
 
 }

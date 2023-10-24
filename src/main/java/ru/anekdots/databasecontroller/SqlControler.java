@@ -94,4 +94,22 @@ public class SqlControler {
         List<JokesModel> ans = jokesTable.getJokes(count);
         return ans;
     }
+
+    /**
+     * Получить все шутки из БД
+     * @return возвращает список JokesModel
+     * @throws SQLException
+     */
+
+    public String getAllJokes() throws SQLException {
+        List<JokesModel> jokesList = jokesTable.getAllJokes();
+        if (jokesList.isEmpty()){
+            return "Пока наша база шуток пуста! Но вы можете добавить свой анекдот:)";
+        }
+        String ans = "";
+        for (int i = 0; i < jokesList.size(); i++){
+            ans = ans  + jokesList.get(i).JokeText + "\n";
+        }
+        return ans;
+    }
 }

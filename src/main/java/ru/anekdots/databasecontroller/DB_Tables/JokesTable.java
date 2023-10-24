@@ -74,6 +74,23 @@ public class JokesTable extends BaseTable implements TableOperations{
         return ans;
     }
     /**
+     * Получить все шутки из БД
+     * @return возвращает список объектов класса JokesModel
+     * @throws SQLException
+     */
+
+    public List<JokesModel> getAllJokes() throws SQLException{
+        ResultSet rs = executeSqlStatement("SELECT *" + "FROM Jokes");
+        List<JokesModel> ans = new ArrayList<JokesModel>();
+
+        while (rs.next()){
+            ans.add(new JokesModel(rs.getInt("id"),
+                    rs.getString("jokesText")));
+        }
+        return ans;
+    }
+
+    /**
      * Добавить шутку в БД
      *
      * @param text
