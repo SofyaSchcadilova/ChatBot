@@ -60,7 +60,7 @@ public class SqlControler {
      *
      * @throws SQLException
      */
-    public boolean addJoke(String JokeText) throws SQLException{
+    public boolean addJoke(String JokeText) throws SQLException {
         return jokesTable.addJokes(JokeText);
     }
 
