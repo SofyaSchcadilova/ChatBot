@@ -45,7 +45,7 @@ public class Logic {
      * @param rawText "сырой" текст, userId временно
       */
 
-    String think(String rawText, Long userId) {
+    String think(String rawText, Long userId) throws SQLException {
         String answer;
 
 
