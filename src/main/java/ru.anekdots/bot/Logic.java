@@ -2,10 +2,13 @@ package ru.anekdots.bot;
 
 import ru.anekdots.databasecontroller.SqlControler;
 import ru.anekdots.databasecontroller.models.JokesModel;
+import ru.anekdots.databasecontroller.models.UserModel;
 import ru.anekdots.resourses.answers;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Основной класс логики
@@ -25,16 +28,22 @@ public class Logic {
         this.bot = bot;
     }
 
+    /**
+     * Хранение коллекции id пользователей, чтобы принимать новые анекдоты
+     */
+
+    Set<Long> userWithJoke= new TreeSet<>();
+
+    void addUserWithJoke(Long chatID){
+        userWithJoke.add(chatID);
+    }
 
     /**
      * Обработка запроса пользователя
      * @param rawText "сырой" текст
       */
 
-    String think(String rawText) throws SQLException, ClassNotFoundException {
-
-
-
+    static String think(String rawText) {
         String answer;
         switch (rawText) {
             case ("/start"):
@@ -43,11 +52,17 @@ public class Logic {
             case ("/help"):
                 answer = answers._HELP;
                 break;
-            case ("/getAll"):
-                answer = DB.getAllJokes();
+            case ("Предложить анекдот"):
+                answer = "Введите анекдот";
+                break;
+            case ("successfullyAdded"):
+                answer = "Анекдот добавлен!";
+                break;
+            case ("unSuccessfullyAdded"):
+                answer = "Такой анекдот уже есть!";
                 break;
             default:
-                answer = "Я не знаю такой команды:(";
+                answer = "Я не знаю такую команду :(\nВведи /help для справки";
                 break;
             }
         return answer;

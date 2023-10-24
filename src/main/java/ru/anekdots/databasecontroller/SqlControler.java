@@ -16,7 +16,7 @@ public class SqlControler {
     static String ROOT = System.getProperty("user.dir");
     public static final String DB_URL = "jdbc:h2:" + ROOT + "\\src\\main\\java\\database\\test.h2";
     public static final String DB_Driver = "org.h2.Driver";
-    JokesTable jokesTable;
+    static JokesTable jokesTable;
 
     java.sql.Connection connection;
     public SqlControler() throws SQLException, ClassNotFoundException{
@@ -60,7 +60,7 @@ public class SqlControler {
      *
      * @throws SQLException
      */
-    public boolean addJoke(String JokeText) throws SQLException{
+    public static boolean addJoke(String JokeText) throws SQLException{
         return jokesTable.addJokes(JokeText);
     }
 

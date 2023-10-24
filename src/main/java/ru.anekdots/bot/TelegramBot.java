@@ -4,6 +4,8 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.anekdots.databasecontroller.SqlControler;
+import ru.anekdots.databasecontroller.models.UserModel;
 import ru.anekdots.resourses.botsdata;
 
 import java.sql.SQLException;
@@ -72,12 +74,25 @@ public class TelegramBot extends TelegramLongPollingBot implements Bot{
         Long chatId = update.getMessage().getChatId();
         String text = update.getMessage().getText();
 
-        try {
+        if (logic.userWithJoke.contains(chatId)){
+            try {
+                if (SqlControler.addJoke(text)) {
+                    SqlControler.addJoke(text);
+                    sendMessage(logic.think("successfullyAdded"), chatId);
+                } else {
+                    sendMessage(logic.think("unSuccessfullyAdded"), chatId);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            logic.userWithJoke.remove(chatId);
+        } else {
             sendMessage(logic.think(text), chatId);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
         }
+
+        if (text.equals("Предложить анекдот")) {
+            logic.addUserWithJoke(chatId);
+        }
+
     }
 }
