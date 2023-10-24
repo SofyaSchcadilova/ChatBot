@@ -30,8 +30,7 @@ public class LogicTest {
     }
 
     @After
-    public void afterClass() {
-        System.out.println("Tests finished");
+    public void afterClass() {        System.out.println("Tests finished");
     }
     @Test
     public void thinkTest() throws SQLException, ClassNotFoundException {
