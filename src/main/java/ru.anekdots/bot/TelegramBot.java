@@ -73,26 +73,6 @@ public class TelegramBot extends TelegramLongPollingBot implements Bot{
     public void onUpdateReceived(Update update) {
         Long chatId = update.getMessage().getChatId();
         String text = update.getMessage().getText();
-
-        if (logic.userWithJoke.contains(chatId)){
-            try {
-                if (SqlControler.addJoke(text)) {
-                    SqlControler.addJoke(text);
-                    sendMessage(logic.think("successfullyAdded"), chatId);
-                } else {
-                    sendMessage(logic.think("unSuccessfullyAdded"), chatId);
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-            logic.userWithJoke.remove(chatId);
-        } else {
-            sendMessage(logic.think(text), chatId);
-        }
-
-        if (text.equals("Предложить анекдот")) {
-            logic.addUserWithJoke(chatId);
-        }
-
+        sendMessage(logic.think(text, chatId), chatId);
     }
 }
