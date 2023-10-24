@@ -22,6 +22,7 @@ public class SqlControler {
         System.out.println(ROOT);
         Class.forName(DB_Driver);
         jokesTable = new JokesTable();
+        createTables();
         /*
         try {
             Class.forName(DB_Driver); //Проверяем наличие JDBC драйвера для работы с БД

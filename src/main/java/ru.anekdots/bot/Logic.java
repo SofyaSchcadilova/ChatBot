@@ -40,9 +40,10 @@ public class Logic {
         userWithJoke.add(chatID);
     }
 
+
     /**
      * Обработка запроса пользователя
-     * @param rawText "сырой" текст, userId временно
+     * @param rawText "сырой" текст
       */
 
     String think(String rawText, Long userId) throws SQLException {
@@ -53,15 +54,17 @@ public class Logic {
             try {
                 if (DB.addJoke(rawText)) {
                     DB.addJoke(rawText);
+                    userWithJoke.remove(userId);
                     return "Анекдот добавлен!";
                 } else {
+                    userWithJoke.remove(userId);
                     return "Такой анекдот уже есть!";
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
-        userWithJoke.remove(userId);
+
 
         rawText = rawText.toLowerCase();
         switch (rawText) {
@@ -74,6 +77,9 @@ public class Logic {
             case ("предложить анекдот"):
                 addUserWithJoke(userId);
                 answer = "Введите анекдот";
+                break;
+            case ("/getall"):
+                answer = DB.getAllJokes();
                 break;
             default:
                 answer = "Я не знаю такую команду :(\nВведи /help для справки";

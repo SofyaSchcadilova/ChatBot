@@ -36,9 +36,17 @@ public class LogicTest {
     @Test
     public void thinkTest() throws SQLException, ClassNotFoundException {
         Logic logic = new Logic();
+        String joke1 = "смешной анек";
+        String joke2 = "не смешной анек";
+
         logic.think("Предложить анекдот", 5L);
-        Assert.assertEquals("Анекдот добавлен!", logic.think("новый анек", 5L));
+        Assert.assertEquals("Анекдот добавлен!", logic.think(joke1, 5L));
         logic.think("Предложить анекдот", 3L);
-        Assert.assertEquals("Такой анекдот уже есть!", logic.think("Пошёл как-то мужик в лес", 3L));
+        Assert.assertEquals("Такой анекдот уже есть!", logic.think(joke1, 3L));
+
+        logic.think("Предложить анекдот", 5L);
+        Assert.assertEquals("Анекдот добавлен!", logic.think(joke2, 5L));
+        Assert.assertEquals( joke1 + "\n" + joke2 +"\n", logic.think("/getall", 5L));
     }
+
 }
