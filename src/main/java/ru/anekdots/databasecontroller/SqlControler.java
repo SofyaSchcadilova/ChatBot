@@ -102,8 +102,15 @@ public class SqlControler {
      * @throws SQLException
      */
 
-    public List<JokesModel> getAllJokes() throws SQLException{
-        List<JokesModel> ans = jokesTable.getAllJokes();
+    public String getAllJokes() throws SQLException {
+        List<JokesModel> jokesList = jokesTable.getAllJokes();
+        if (jokesList.isEmpty()){
+            return "Пока наша база шуток пуста! Но вы можете добавить свой анекдот:)";
+        }
+        String ans = "";
+        for (int i = 0; i < jokesList.size(); i++){
+            ans = ans  + jokesList.get(i).JokeText + "\n";
+        }
         return ans;
     }
 }

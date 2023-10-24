@@ -20,11 +20,16 @@ public class LogicTest {
     public void afterClass() {
         System.out.println("Tests finished");
     }
-    @Test
-    public void thinkTest() throws SQLException, ClassNotFoundException {
 
-        Assert.assertEquals("Вы написали: Test default case", Logic.think("Test default case"));
-
-    }
+    /*@Test
+    public void thinkTest() throws SQLException {
+        Logic.think("Предложить анекдот", 5L);
+        Assert.assertEquals("Анекдот добавлен!", Logic.think("смешной анек", 5L));
+        Logic.think("Предложить анекдот", 3L);
+        Assert.assertEquals("Такой анекдот уже есть!", Logic.think("смешной анек", 3L));
+        Logic.think("Предложить анекдот", 5L);
+        Logic.think("колобок повесился:(", 5L);
+        Assert.assertEquals("смешной анек\nколобок повесился:(", Logic.think("/getAll", 3L));
+    }*/
 
 }

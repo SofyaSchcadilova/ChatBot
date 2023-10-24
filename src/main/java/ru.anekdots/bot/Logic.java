@@ -25,12 +25,16 @@ public class Logic {
         this.bot = bot;
     }
 
+
     /**
      * Обработка запроса пользователя
      * @param rawText "сырой" текст
       */
 
-    static String think(String rawText) throws SQLException, ClassNotFoundException {
+    String think(String rawText) throws SQLException, ClassNotFoundException {
+
+
+
         String answer;
         switch (rawText) {
             case ("/start"):
@@ -40,7 +44,7 @@ public class Logic {
                 answer = answers._HELP;
                 break;
             case ("/getAll"):
-                answer = answers.getAll();
+                answer = DB.getAllJokes();
                 break;
             default:
                 answer = "Я не знаю такой команды:(";

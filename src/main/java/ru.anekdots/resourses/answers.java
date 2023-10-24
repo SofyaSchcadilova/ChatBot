@@ -41,19 +41,5 @@ public class answers {
 
                         После отправки анекдота появляется кнопка "Оценить" - оцени анекдот!!!""";
 
-    /**
-     * сообщение - вывод всех шуток
-     */
-    public static String getAll() throws SQLException, ClassNotFoundException {
-        SqlControler sqlControler = new SqlControler();
-        List<JokesModel> jokesList = sqlControler.getAllJokes();
-        if (jokesList.isEmpty()){
-            return "Пока наша база шуток пуста! Но вы можете добавить свой анекдот:)";
-        }
-        String ans = "";
-        for (int i = 0; i < jokesList.size(); i++){
-            ans = ans  + jokesList.get(i).JokeText + "\n";
-        }
-        return ans;
-    }
+
 }
