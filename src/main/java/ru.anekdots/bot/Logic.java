@@ -21,6 +21,12 @@ public class Logic {
      */
     SqlControler DB;
 
+
+    Logic(SqlControler sql){
+        DB = sql;
+    }
+
+
     Logic() throws SQLException, ClassNotFoundException {
         DB = new SqlControler();
     }
