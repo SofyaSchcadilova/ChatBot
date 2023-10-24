@@ -18,7 +18,11 @@ import java.sql.SQLException;
 
 @ExtendWith(MockitoExtension.class)
 public class LogicTest {
+    @Mock
+    SqlControler sqlControler = new SqlControler();
 
+    public LogicTest() throws SQLException, ClassNotFoundException {
+    }
 
 
     @Before
@@ -32,9 +36,8 @@ public class LogicTest {
     }
     @Test
     public void thinkTest() throws SQLException {
-        Mockito.when(SqlControler.addJoke("хахаха")).then("true");
         Logic.think("Предложить анекдот", 5L);
-        Assert.assertEquals("Анекдот добавлен!", Logic.think("successfullyAdded", 5L));
+        Assert.assertEquals("Анекдот добавлен!", Logic.think("новый анек", 5L));
         Logic.think("Предложить анекдот", 3L);
         Assert.assertEquals("Такой анекдот уже есть!", Logic.think("Пошёл как-то мужик в лес", 3L));
     }

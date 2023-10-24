@@ -51,15 +51,15 @@ public class Logic {
             try {
                 if (SqlControler.addJoke(rawText)) {
                     SqlControler.addJoke(rawText);
-                    rawText = "successfullyAdded";
+                    return "Анекдот добавлен!";
                 } else {
-                    rawText = "unSuccessfullyAdded";
+                    return "Такой анекдот уже есть!";
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-            userWithJoke.remove(userId);
         }
+        userWithJoke.remove(userId);
 
         rawText = rawText.toLowerCase();
         switch (rawText) {
@@ -72,12 +72,6 @@ public class Logic {
             case ("предложить анекдот"):
                 addUserWithJoke(userId);
                 answer = "Введите анекдот";
-                break;
-            case ("successfullyAdded"):
-                answer = "Анекдот добавлен!";
-                break;
-            case ("unSuccessfullyAdded"):
-                answer = "Такой анекдот уже есть!";
                 break;
             default:
                 answer = "Я не знаю такую команду :(\nВведи /help для справки";
