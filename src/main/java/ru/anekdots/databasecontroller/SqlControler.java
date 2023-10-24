@@ -5,7 +5,6 @@ import ru.anekdots.databasecontroller.DB_Tables.JokesTable;
 import ru.anekdots.databasecontroller.models.JokesModel;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,7 +15,7 @@ public class SqlControler {
     static String ROOT = System.getProperty("user.dir");
     public static final String DB_URL = "jdbc:h2:" + ROOT + "\\src\\main\\java\\database\\test.h2";
     public static final String DB_Driver = "org.h2.Driver";
-    JokesTable jokesTable;
+    static JokesTable jokesTable;
 
     java.sql.Connection connection;
     public SqlControler() throws SQLException, ClassNotFoundException{

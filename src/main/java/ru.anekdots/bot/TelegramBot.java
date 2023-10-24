@@ -71,7 +71,6 @@ public class TelegramBot extends TelegramLongPollingBot implements Bot{
     public void onUpdateReceived(Update update) {
         Long chatId = update.getMessage().getChatId();
         String text = update.getMessage().getText();
-
-        sendMessage(logic.think(text), chatId);
+        sendMessage(logic.think(text, chatId), chatId);
     }
 }
