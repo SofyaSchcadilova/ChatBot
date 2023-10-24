@@ -6,7 +6,6 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.anekdots.databasecontroller.SqlControler;
 
@@ -35,10 +34,11 @@ public class LogicTest {
         System.out.println("Tests finished");
     }
     @Test
-    public void thinkTest() throws SQLException {
-        Logic.think("Предложить анекдот", 5L);
-        Assert.assertEquals("Анекдот добавлен!", Logic.think("новый анек", 5L));
-        Logic.think("Предложить анекдот", 3L);
-        Assert.assertEquals("Такой анекдот уже есть!", Logic.think("Пошёл как-то мужик в лес", 3L));
+    public void thinkTest() throws SQLException, ClassNotFoundException {
+        Logic logic = new Logic();
+        logic.think("Предложить анекдот", 5L);
+        Assert.assertEquals("Анекдот добавлен!", logic.think("новый анек", 5L));
+        logic.think("Предложить анекдот", 3L);
+        Assert.assertEquals("Такой анекдот уже есть!", logic.think("Пошёл как-то мужик в лес", 3L));
     }
 }

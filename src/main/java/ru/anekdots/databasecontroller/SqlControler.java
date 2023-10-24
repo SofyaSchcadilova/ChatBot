@@ -5,7 +5,6 @@ import ru.anekdots.databasecontroller.DB_Tables.JokesTable;
 import ru.anekdots.databasecontroller.models.JokesModel;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -60,7 +59,7 @@ public class SqlControler {
      *
      * @throws SQLException
      */
-    public static boolean addJoke(String JokeText) throws SQLException{
+    public boolean addJoke(String JokeText) throws SQLException{
         return jokesTable.addJokes(JokeText);
     }
 

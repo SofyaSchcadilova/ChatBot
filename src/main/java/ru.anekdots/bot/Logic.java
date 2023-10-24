@@ -1,12 +1,11 @@
 package ru.anekdots.bot;
 
 import ru.anekdots.databasecontroller.SqlControler;
-import ru.anekdots.databasecontroller.models.JokesModel;
-import ru.anekdots.databasecontroller.models.UserModel;
+
 import ru.anekdots.resourses.answers;
 
 import java.sql.SQLException;
-import java.util.List;
+
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -22,6 +21,9 @@ public class Logic {
      */
     SqlControler DB;
 
+    Logic() throws SQLException, ClassNotFoundException {
+        DB = new SqlControler();
+    }
 
     Logic(Bot bot) throws SQLException, ClassNotFoundException {
         DB = new SqlControler();
@@ -34,7 +36,7 @@ public class Logic {
 
     static Set<Long> userWithJoke= new TreeSet<>();
 
-    static void addUserWithJoke(Long chatID){
+    void addUserWithJoke(Long chatID){
         userWithJoke.add(chatID);
     }
 
@@ -43,14 +45,14 @@ public class Logic {
      * @param rawText "сырой" текст, userId временно
       */
 
-    static String think(String rawText, Long userId) {
+    String think(String rawText, Long userId) {
         String answer;
 
 
         if (userWithJoke.contains(userId)){
             try {
-                if (SqlControler.addJoke(rawText)) {
-                    SqlControler.addJoke(rawText);
+                if (DB.addJoke(rawText)) {
+                    DB.addJoke(rawText);
                     return "Анекдот добавлен!";
                 } else {
                     return "Такой анекдот уже есть!";
