@@ -5,6 +5,8 @@ import org.junit.Before;
 import org.junit.After;
 import org.junit.Assert;
 
+import java.sql.SQLException;
+
 /**
  * Тест класса логики
  */
@@ -19,7 +21,7 @@ public class LogicTest {
         System.out.println("Tests finished");
     }
     @Test
-    public void thinkTest() {
+    public void thinkTest() throws SQLException, ClassNotFoundException {
 
         Assert.assertEquals("Вы написали: Test default case", Logic.think("Test default case"));
 

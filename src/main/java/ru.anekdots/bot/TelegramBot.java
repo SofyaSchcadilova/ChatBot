@@ -72,6 +72,12 @@ public class TelegramBot extends TelegramLongPollingBot implements Bot{
         Long chatId = update.getMessage().getChatId();
         String text = update.getMessage().getText();
 
-        sendMessage(logic.think(text), chatId);
+        try {
+            sendMessage(logic.think(text), chatId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

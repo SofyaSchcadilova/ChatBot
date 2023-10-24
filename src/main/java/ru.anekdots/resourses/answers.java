@@ -1,4 +1,11 @@
 package ru.anekdots.resourses;
+
+import ru.anekdots.databasecontroller.SqlControler;
+import ru.anekdots.databasecontroller.models.JokesModel;
+
+import java.sql.SQLException;
+import java.util.List;
+
 /**
  *  Ответы бота /
  *  Строки, которыми отвечает бот
@@ -34,4 +41,19 @@ public class answers {
 
                         После отправки анекдота появляется кнопка "Оценить" - оцени анекдот!!!""";
 
+    /**
+     * сообщение - вывод всех шуток
+     */
+    public static String getAll() throws SQLException, ClassNotFoundException {
+        SqlControler sqlControler = new SqlControler();
+        List<JokesModel> jokesList = sqlControler.getAllJokes();
+        if (jokesList.isEmpty()){
+            return "Пока наша база шуток пуста! Но вы можете добавить свой анекдот:)";
+        }
+        String ans = "";
+        for (int i = 0; i < jokesList.size(); i++){
+            ans = ans  + jokesList.get(i).JokeText + "\n";
+        }
+        return ans;
+    }
 }

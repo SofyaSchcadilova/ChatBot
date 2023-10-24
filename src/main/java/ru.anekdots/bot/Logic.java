@@ -30,7 +30,7 @@ public class Logic {
      * @param rawText "сырой" текст
       */
 
-    static String think(String rawText) {
+    static String think(String rawText) throws SQLException, ClassNotFoundException {
         String answer;
         switch (rawText) {
             case ("/start"):
@@ -39,8 +39,11 @@ public class Logic {
             case ("/help"):
                 answer = answers._HELP;
                 break;
+            case ("/getAll"):
+                answer = answers.getAll();
+                break;
             default:
-                answer = "Вы написали: " + rawText;
+                answer = "Я не знаю такой команды:(";
                 break;
             }
         return answer;

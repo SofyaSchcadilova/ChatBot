@@ -95,4 +95,15 @@ public class SqlControler {
         List<JokesModel> ans = jokesTable.getJokes(count);
         return ans;
     }
+
+    /**
+     * Получить все шутки из БД
+     * @return возвращает список JokesModel
+     * @throws SQLException
+     */
+
+    public List<JokesModel> getAllJokes() throws SQLException{
+        List<JokesModel> ans = jokesTable.getAllJokes();
+        return ans;
+    }
 }

@@ -7,9 +7,9 @@ public class botsdata {
     /**
      * Токен бота
      */
-    final static public String TOKEN = "5805156564:AAEbJpeZqwBcWchldQWVYcje8t-D3hqAdiY";
+    final static public String TOKEN = "6608006411:AAHxxxH19u2kfWORCgO5u47vgGoO_Gk2ad0";
     /**
      * Имя бота
      */
-    final static public String NAME = "Teledawn_2bot";
+    final static public String NAME = "https://t.me/anekbots_bot";
 }
