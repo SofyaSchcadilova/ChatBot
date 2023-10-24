@@ -54,15 +54,17 @@ public class Logic {
             try {
                 if (DB.addJoke(rawText)) {
                     DB.addJoke(rawText);
+                    userWithJoke.remove(userId);
                     return "Анекдот добавлен!";
                 } else {
+                    userWithJoke.remove(userId);
                     return "Такой анекдот уже есть!";
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
-        userWithJoke.remove(userId);
+
 
         rawText = rawText.toLowerCase();
         switch (rawText) {
@@ -76,7 +78,7 @@ public class Logic {
                 addUserWithJoke(userId);
                 answer = "Введите анекдот";
                 break;
-            case ("/getAll"):
+            case ("/getall"):
                 answer = DB.getAllJokes();
                 break;
             default:
