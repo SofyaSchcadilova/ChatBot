@@ -32,19 +32,36 @@ public class Logic {
      * Хранение коллекции id пользователей, чтобы принимать новые анекдоты
      */
 
-    Set<Long> userWithJoke= new TreeSet<>();
+    static Set<Long> userWithJoke= new TreeSet<>();
 
-    void addUserWithJoke(Long chatID){
+    static void addUserWithJoke(Long chatID){
         userWithJoke.add(chatID);
     }
 
     /**
      * Обработка запроса пользователя
-     * @param rawText "сырой" текст
+     * @param rawText "сырой" текст, userId временно
       */
 
-    static String think(String rawText) {
+    static String think(String rawText, Long userId) {
         String answer;
+
+
+        if (userWithJoke.contains(userId)){
+            try {
+                if (SqlControler.addJoke(rawText)) {
+                    SqlControler.addJoke(rawText);
+                    rawText = "successfullyAdded";
+                } else {
+                    rawText = "unSuccessfullyAdded";
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            userWithJoke.remove(userId);
+        }
+
+        rawText = rawText.toLowerCase();
         switch (rawText) {
             case ("/start"):
                 answer = answers._START;
@@ -52,7 +69,8 @@ public class Logic {
             case ("/help"):
                 answer = answers._HELP;
                 break;
-            case ("Предложить анекдот"):
+            case ("предложить анекдот"):
+                addUserWithJoke(userId);
                 answer = "Введите анекдот";
                 break;
             case ("successfullyAdded"):
