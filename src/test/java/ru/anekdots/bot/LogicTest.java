@@ -46,5 +46,6 @@ public class LogicTest {
         logic.think("Предложить анекдот", 5L);
         Assert.assertEquals("Анекдот добавлен!", logic.think(joke2, 5L));
         Assert.assertEquals( joke1 + "\n" + joke2 +"\n", logic.think("/getall", 5L));
+        logic.DB.close();
     }
 }
