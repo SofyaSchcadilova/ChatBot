@@ -1,6 +1,6 @@
 package ru.anekdots.databasecontroller.DB_Tables;
 
-import ru.anekdots.databasecontroller.SqlControler;
+import ru.anekdots.databasecontroller.SqlController;
 
 import java.io.Closeable;
 import java.sql.Connection;
@@ -19,7 +19,7 @@ public class BaseTable implements Closeable {
 
     BaseTable(String tableName) throws SQLException {
         this.tableName = tableName;
-        this.connection = SqlControler.getConnection();
+        this.connection = SqlController.getConnection();
     }
 
 
@@ -40,7 +40,7 @@ public class BaseTable implements Closeable {
      */
     void reopenConnection() throws SQLException{
         if (connection == null || connection.isClosed()) {
-            connection = SqlControler.getConnection();
+            connection = SqlController.getConnection();
         }
     }
 

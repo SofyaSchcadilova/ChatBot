@@ -1,6 +1,6 @@
 package ru.anekdots.bot;
 
-import ru.anekdots.databasecontroller.SqlControler;
+import ru.anekdots.databasecontroller.SqlController;
 
 import ru.anekdots.resourses.answers;
 
@@ -19,20 +19,20 @@ public class Logic {
     /**
      * Управление базой данных
      */
-    SqlControler DB;
+    SqlController DB;
 
 
-    Logic(SqlControler sql){
+    Logic(SqlController sql){
         DB = sql;
     }
 
 
     Logic() throws SQLException, ClassNotFoundException {
-        DB = new SqlControler();
+        DB = new SqlController();
     }
 
     Logic(Bot bot) throws SQLException, ClassNotFoundException {
-        DB = new SqlControler();
+        DB = new SqlController();
         this.bot = bot;
     }
 

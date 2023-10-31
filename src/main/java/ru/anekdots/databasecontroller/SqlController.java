@@ -11,14 +11,14 @@ import java.util.List;
  * Класс общения базы данных с основной логикой
  *
  */
-public class SqlControler {
+public class SqlController {
     static String ROOT = System.getProperty("user.dir");
     public static final String DB_URL = "jdbc:h2:" + ROOT + "\\src\\main\\database\\curDB.h2";
     public static final String DB_Driver = "org.h2.Driver";
     static JokesTable jokesTable;
 
     java.sql.Connection connection;
-    public SqlControler() throws SQLException, ClassNotFoundException{
+    public SqlController() throws SQLException, ClassNotFoundException{
         System.out.println(DB_URL);
         Class.forName(DB_Driver);
         jokesTable = new JokesTable();
