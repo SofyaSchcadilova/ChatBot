@@ -1,7 +1,6 @@
 package ru.anekdots.databasecontroller.DB_Tables;
 
 import ru.anekdots.databasecontroller.models.JokesModel;
-import ru.anekdots.databasecontroller.models.UserModel;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,8 +33,8 @@ public class JokesTable extends BaseTable implements TableOperations{
      * @throws SQLException
      */
     public int find(String text) throws SQLException{
-        ResultSet rs = executeSqlStatement("SELECT id FROM Jokes WHERE (jokesText=\'"+text+"\')");
-        if (rs.next()==false){
+        ResultSet rs = executeSqlStatement("SELECT id FROM Jokes WHERE (jokesText='" +text+ "')");
+        if (!rs.next()){
             return -1;
         }
         return rs.getInt("id");
@@ -49,14 +48,14 @@ public class JokesTable extends BaseTable implements TableOperations{
      */
     public JokesModel getById(int id) throws SQLException{
 
-        ResultSet rs = executeSqlStatement("SELECT * FROM Jokes WHERE (id="+String.valueOf(id)+")");
-        if (rs.next()==false){
+        ResultSet rs = executeSqlStatement("SELECT * FROM Jokes WHERE (id="+(id)+")");
+        if (!rs.next()){
             return new JokesModel(-1);
         }
-        JokesModel ans = new JokesModel(rs.getInt("id"),
+
+        return new JokesModel(rs.getInt("id"),
                 rs.getString("jokesText"),
                 rs.getInt("rate"));
-        return ans;
     }
 
     /**
@@ -66,7 +65,7 @@ public class JokesTable extends BaseTable implements TableOperations{
      */
     public int getNumberOfJokes() throws SQLException {
        ResultSet rs = executeSqlStatement("SELECT COUNT(*) as count FROM Jokes");
-       if (rs.next()!=false){
+       if (rs.next()){
            return rs.getInt("count");
        }
        return 0;
@@ -81,7 +80,7 @@ public class JokesTable extends BaseTable implements TableOperations{
     public List<JokesModel> getJokes(int N) throws SQLException{
         ResultSet rs = executeSqlStatement("SELECT * " +
                 "FROM Jokes " +
-                "limit "+String.valueOf(N));
+                "limit "+ N);
         List<JokesModel> ans = new ArrayList<JokesModel>();
 
         while (rs.next()){
@@ -119,7 +118,7 @@ public class JokesTable extends BaseTable implements TableOperations{
     public boolean addJokes(String text) throws  SQLException{
         if (find(text)==-1) {
             executeSqlStatement("INSERT INTO Jokes(jokesText, rate) " +
-                    "VALUES (\'" + text + "\', 0)");
+                    "VALUES ('" + text + "', 0)");
             return true;
         }
         else {
@@ -134,16 +133,15 @@ public class JokesTable extends BaseTable implements TableOperations{
      * @throws SQLException
      */
     public void changeRate(int jokeId, boolean up) throws SQLException {
-        ResultSet rs = executeSqlStatement("Select * FROM Jokes WHERE (id="+String.valueOf(jokeId)+")");
-        if (rs.next()==false){
+        ResultSet rs = executeSqlStatement("Select * FROM Jokes WHERE (id="+ jokeId +")");
+        if (!rs.next()){
             return;
         }
         int curRate = rs.getInt("rate");
         if (up) curRate += 1;
         else curRate -= 1;
 
-        executeSqlStatement("UPDATE Jokes SET rate = "+String.valueOf(curRate));
-        return;
+        executeSqlStatement("UPDATE Jokes SET rate = "+ curRate);
     }
 
     /**
@@ -180,7 +178,7 @@ public class JokesTable extends BaseTable implements TableOperations{
         ResultSet rs = executeSqlStatement("SELECT * FROM Jokes " +
                 "ORDER BY RAND() " +
                 "LIMIT 1");
-        if (rs.next()==false){
+        if (!rs.next()){
             return new JokesModel(-1);
         }
         return  new JokesModel( rs.getInt("id"),

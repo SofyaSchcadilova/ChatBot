@@ -12,6 +12,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 
+
+/**
+ * Класс управления с таблицей пользователей
+ *
+ * !!! НЕ ПОЛЬЗОВАТЬСЯ ЭТИМ КЛАССОМ НАПРЯМУЮ !!!
+ */
 public class UserTable extends  BaseTable implements TableOperations{
 
     public UserTable() throws SQLException {
@@ -90,8 +96,8 @@ public class UserTable extends  BaseTable implements TableOperations{
      */
     public UserModel getUserByTelegramId(long TelegramId) throws SQLException, IOException {
 
-        ResultSet rs = executeSqlStatement("SELECT * FROM Users WHERE (telegram_id="+String.valueOf(TelegramId)+")");
-        if (rs.next()==false){
+        ResultSet rs = executeSqlStatement("SELECT * FROM Users WHERE (telegram_id="+ TelegramId +")");
+        if (!rs.next()){
             return new UserModel(-1);
         }
         InputStream input = rs.getBinaryStream("seenJokes");
@@ -115,8 +121,8 @@ public class UserTable extends  BaseTable implements TableOperations{
      */
     public UserModel getUserByBaseId(int BaseId) throws SQLException, IOException {
 
-        ResultSet rs = executeSqlStatement("SELECT * FROM Users WHERE (id="+String.valueOf(BaseId)+")");
-        if (rs.next()==false){
+        ResultSet rs = executeSqlStatement("SELECT * FROM Users WHERE (id="+ BaseId +")");
+        if (!rs.next()){
             return new UserModel(-1);
         }
         InputStream input = rs.getBinaryStream("seenJokes");
@@ -146,7 +152,7 @@ public class UserTable extends  BaseTable implements TableOperations{
             byte[] bytes = new byte[255];
             Arrays.fill(bytes,(byte) 0);
 
-            String sql = "UPDATE Users SET seenJokes = ? WHERE telegram_id = " + String.valueOf(Telegram_id);
+            String sql = "UPDATE Users SET seenJokes = ? WHERE telegram_id = " + Telegram_id;
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setBinaryStream(1,new ByteArrayInputStream(bytes));
             ps.executeUpdate();
@@ -175,11 +181,8 @@ public class UserTable extends  BaseTable implements TableOperations{
      * @throws SQLException
      */
     public boolean IsUserExists(long TelegramId) throws SQLException {
-        ResultSet rs = executeSqlStatement("SELECT * FROM Users WHERE (telegram_id ="+String.valueOf(TelegramId)+")");
-        if (rs.next()==false){
-            return false;
-        }
-        return true;
+        ResultSet rs = executeSqlStatement("SELECT * FROM Users WHERE (telegram_id ="+ TelegramId +")");
+        return rs.next();
     }
     @Override
     public void createForeignKey() throws SQLException {
@@ -195,8 +198,8 @@ public class UserTable extends  BaseTable implements TableOperations{
      * @throws IOException
      */
     public boolean IsSeenJoke(long Telegram_id,int JokeId) throws SQLException, IOException {
-        ResultSet rs = executeSqlStatement("SELECT * FROM Users WHERE (telegram_id="+String.valueOf(Telegram_id)+")");
-        if (rs.next()==false){
+        ResultSet rs = executeSqlStatement("SELECT * FROM Users WHERE (telegram_id="+ Telegram_id +")");
+        if (!rs.next()){
             return false;
         }
         UserModel user = getUserByTelegramId(Telegram_id);
@@ -212,8 +215,8 @@ public class UserTable extends  BaseTable implements TableOperations{
      * @throws IOException
      */
     public void seenJoke(long Telegram_id, int JokeId) throws SQLException, IOException {
-        ResultSet rs = executeSqlStatement("SELECT * FROM Users WHERE (telegram_id="+String.valueOf(Telegram_id)+")");
-        if (rs.next()==false){
+        ResultSet rs = executeSqlStatement("SELECT * FROM Users WHERE (telegram_id="+ Telegram_id +")");
+        if (!rs.next()){
             return;
         }
         InputStream input = rs.getBinaryStream("seenJokes");
@@ -223,7 +226,7 @@ public class UserTable extends  BaseTable implements TableOperations{
         Boolean[] temp = seen.toArray(new Boolean[seen.size()]);
         byte[] t2 = toByteArray(temp);
 
-        String sql = "UPDATE Users SET seenJokes = ? WHERE telegram_id = " + String.valueOf(Telegram_id);
+        String sql = "UPDATE Users SET seenJokes = ? WHERE telegram_id = " + Telegram_id;
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setBinaryStream(1,new ByteArrayInputStream(t2));
         ps.executeUpdate();
@@ -237,7 +240,7 @@ public class UserTable extends  BaseTable implements TableOperations{
      */
     public void savePrevJoke(long telegram_id, int JokeId) throws SQLException {
         if (IsUserExists(telegram_id)){
-            executeSqlStatement("UPDATE Users SET prevJoke =" + String.valueOf(JokeId)+ " WHERE telegram_id ="+String.valueOf(telegram_id));
+            executeSqlStatement("UPDATE Users SET prevJoke =" + JokeId + " WHERE telegram_id ="+ telegram_id);
         }
     }
 
@@ -248,8 +251,8 @@ public class UserTable extends  BaseTable implements TableOperations{
      * @throws SQLException
      */
     public int getUserTime(long telegram_id) throws SQLException {
-        ResultSet rs = executeSqlStatement("SELECT * FROM Users WHERE (telegram_id="+String.valueOf(telegram_id)+")");
-        if (rs.next()==false){
+        ResultSet rs = executeSqlStatement("SELECT * FROM Users WHERE (telegram_id="+ telegram_id +")");
+        if (!rs.next()){
             return -1;
         }
         return rs.getInt("time");
@@ -266,6 +269,6 @@ public class UserTable extends  BaseTable implements TableOperations{
         if (!IsUserExists(telegram_id)) {
             throw new SQLException("Нет такого пользователя");
         }
-        executeSqlStatement("UPDATE Users SET time =" + String.valueOf(time) + " WHERE telegram_id =" + String.valueOf(telegram_id));
+        executeSqlStatement("UPDATE Users SET time =" + time + " WHERE telegram_id =" + telegram_id);
     }
 }
