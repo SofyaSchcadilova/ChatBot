@@ -1,5 +1,6 @@
 package ru.anekdots.bot;
 
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import ru.anekdots.databasecontroller.SqlController;
 
 import ru.anekdots.resourses.answers;
@@ -55,7 +56,6 @@ public class Logic {
     String think(String rawText, Long userId) throws SQLException {
         String answer;
 
-
         if (userWithJoke.contains(userId)){
             try {
                 if (DB.addJoke(rawText)) {
@@ -77,16 +77,18 @@ public class Logic {
             case ("/start"):
                 answer = answers._START;
                 break;
-            case ("/help"):
+            case ("/help"), ("нужна помощь"):
                 answer = answers._HELP;
                 break;
-            case ("предложить анекдот"):
+            case ("/suggest"), ("предложить анекдот"):
                 addUserWithJoke(userId);
                 answer = "Введите анекдот";
                 break;
-            case ("/getall"):
+            case ("/getall"), ("все анекдоты"):
                 answer = DB.getAllJokes();
                 break;
+            //case ()
+
             default:
                 answer = "Я не знаю такую команду :(\nВведи /help для справки";
                 break;

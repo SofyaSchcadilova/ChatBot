@@ -3,10 +3,14 @@ package ru.anekdots.bot;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.anekdots.resourses.botsdata;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /***
  * Класс телеграм бота
@@ -47,6 +51,7 @@ public class TelegramBot extends TelegramLongPollingBot implements Bot{
         return Token;
     }
 
+
     /**
      * Отправка сообщения
      * @param text текст сообщения
@@ -57,6 +62,13 @@ public class TelegramBot extends TelegramLongPollingBot implements Bot{
         SendMessage message = new SendMessage();
         message.setText(text);
         message.setChatId(String.valueOf(chatId));
+
+
+        ReplyKeyboardMaker replyKeyboardMaker = new ReplyKeyboardMaker();
+        message.setReplyMarkup(replyKeyboardMaker.getEvaluationKeyboard());
+
+
+
         try {
             execute(message);
         }
