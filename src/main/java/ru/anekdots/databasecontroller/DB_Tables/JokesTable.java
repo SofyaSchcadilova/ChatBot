@@ -23,8 +23,7 @@ public class JokesTable extends BaseTable implements TableOperations{
         super.executeSqlStatement("CREATE TABLE IF NOT EXISTS Jokes(" +
                 "id BIGINT AUTO_INCREMENT PRIMARY KEY," +
                 "jokesText VARCHAR(1023) NOT NULL," +
-                "rate INTEGER NOT NULL," +
-                "rates INTEGER NOT NULL)","Создана таблица " + tableName);
+                "rate INTEGER NOT NULL)","Создана таблица " + tableName);
     }
 
     /**
@@ -34,8 +33,8 @@ public class JokesTable extends BaseTable implements TableOperations{
      * @throws SQLException
      */
     public int find(String text) throws SQLException{
-        ResultSet rs = executeSqlStatement("SELECT id FROM Jokes WHERE (jokesText=\'"+text+"\')");
-        if (rs.next()==false){
+        ResultSet rs = executeSqlStatement("SELECT id FROM Jokes WHERE (jokesText='" +text+ "')");
+        if (!rs.next()){
             return -1;
         }
         return rs.getInt("id");
@@ -49,27 +48,45 @@ public class JokesTable extends BaseTable implements TableOperations{
      */
     public JokesModel getById(int id) throws SQLException{
 
-        ResultSet rs = executeSqlStatement("SELECT * FROM Jokes WHERE (id="+String.valueOf(id)+")");
-        if (rs.next()==false){
+        ResultSet rs = executeSqlStatement("SELECT * FROM Jokes WHERE (id="+(id)+")");
+        if (!rs.next()){
             return new JokesModel(-1);
         }
-        JokesModel ans = new JokesModel(rs.getInt("id"),
+
+        return new JokesModel(rs.getInt("id"),
                 rs.getString("jokesText"),
-                rs.getInt("rate"),
-                rs.getInt("rates"));
-        return ans;
+                rs.getInt("rate"));
     }
-    public List<JokesModel> getJokes(int count) throws SQLException{
+
+    /**
+     * Сколько шуток в базе данных
+     * @return
+     * @throws SQLException
+     */
+    public int getNumberOfJokes() throws SQLException {
+       ResultSet rs = executeSqlStatement("SELECT COUNT(*) as count FROM Jokes");
+       if (rs.next()){
+           return rs.getInt("count");
+       }
+       return 0;
+    }
+
+    /**
+     * Получить N шуток
+     * @param N count
+     * @return
+     * @throws SQLException
+     */
+    public List<JokesModel> getJokes(int N) throws SQLException{
         ResultSet rs = executeSqlStatement("SELECT * " +
                 "FROM Jokes " +
-                "limit "+String.valueOf(count));
+                "limit "+ N);
         List<JokesModel> ans = new ArrayList<JokesModel>();
 
         while (rs.next()){
             ans.add(new JokesModel(rs.getInt("id"),
                     rs.getString("jokesText"),
-                    rs.getInt("rate"),
-                    rs.getInt("rates")));
+                    rs.getInt("rate")));
         }
         return ans;
     }
@@ -82,10 +99,10 @@ public class JokesTable extends BaseTable implements TableOperations{
     public List<JokesModel> getAllJokes() throws SQLException{
         ResultSet rs = executeSqlStatement("SELECT *" + "FROM Jokes");
         List<JokesModel> ans = new ArrayList<JokesModel>();
-
         while (rs.next()){
             ans.add(new JokesModel(rs.getInt("id"),
-                    rs.getString("jokesText")));
+                    rs.getString("jokesText"),
+                    rs.getInt("rate")));
         }
         return ans;
     }
@@ -100,16 +117,72 @@ public class JokesTable extends BaseTable implements TableOperations{
      */
     public boolean addJokes(String text) throws  SQLException{
         if (find(text)==-1) {
-            executeSqlStatement("INSERT INTO Jokes(jokesText, rate, rates) " +
-                    "VALUES (\'" + text + "\', 0, 0)");
+            executeSqlStatement("INSERT INTO Jokes(jokesText, rate) " +
+                    "VALUES ('" + text + "', 0)");
             return true;
         }
         else {
             return false;
         }
     }
+
+    /**
+     * Изменить рейтинг
+     * @param up true если поднять, false если опустить
+     *
+     * @throws SQLException
+     */
+    public void changeRate(int jokeId, boolean up) throws SQLException {
+        ResultSet rs = executeSqlStatement("Select * FROM Jokes WHERE (id="+ jokeId +")");
+        if (!rs.next()){
+            return;
+        }
+        int curRate = rs.getInt("rate");
+        if (up) curRate += 1;
+        else curRate -= 1;
+
+        executeSqlStatement("UPDATE Jokes SET rate = "+ curRate);
+    }
+
+    /**
+     * Получить лучшие n шуток
+     * @param n Количество шуток
+     * @return
+     * @throws SQLException
+     */
+    public ArrayList<JokesModel> getBestJokes(int n) throws SQLException {
+        ResultSet rs = executeSqlStatement("SELECT *" + "FROM Jokes ORDER BY rate");
+        ArrayList<JokesModel> ans = new ArrayList<JokesModel>();
+        while (rs.next()){
+            ans.add(
+                    new JokesModel( rs.getInt("id"),
+                            rs.getString("jokesText"),
+                            rs.getInt("rate")
+                            )
+                    );
+
+        }
+        return ans;
+    }
     @Override
     public void createForeignKey() throws SQLException{
 
+    }
+
+    /**
+     * Получить случайную шутку из Базы данных
+     * @return
+     * @throws SQLException
+     */
+    public JokesModel getRandomJoke() throws SQLException {
+        ResultSet rs = executeSqlStatement("SELECT * FROM Jokes " +
+                "ORDER BY RAND() " +
+                "LIMIT 1");
+        if (!rs.next()){
+            return new JokesModel(-1);
+        }
+        return  new JokesModel( rs.getInt("id"),
+                rs.getString("jokesText"),
+                rs.getInt("rate"));
     }
 }
