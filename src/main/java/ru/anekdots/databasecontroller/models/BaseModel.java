@@ -11,8 +11,9 @@ public abstract class BaseModel {
      */
     protected int id;
 
+    public boolean is_exists = false;
 
-    public long getId(){
+    public int getId(){
         return id;
     }
 
@@ -23,6 +24,9 @@ public abstract class BaseModel {
 
     public BaseModel(int id){
         this.id = id;
+        if (id != -1){
+            is_exists = true;
+        }
     }
 
     @Override

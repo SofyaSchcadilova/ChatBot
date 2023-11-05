@@ -2,8 +2,11 @@ package ru.anekdots.databasecontroller;
 
 
 import ru.anekdots.databasecontroller.DB_Tables.JokesTable;
+import ru.anekdots.databasecontroller.DB_Tables.UserTable;
 import ru.anekdots.databasecontroller.models.JokesModel;
+import ru.anekdots.databasecontroller.models.UserModel;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.List;
 
@@ -16,12 +19,13 @@ public class SqlController {
     public static final String DB_URL = "jdbc:h2:" + ROOT + "\\src\\main\\database\\curDB.h2";
     public static final String DB_Driver = "org.h2.Driver";
     static JokesTable jokesTable;
-
+    static UserTable userTable;
     java.sql.Connection connection;
     public SqlController() throws SQLException, ClassNotFoundException{
         System.out.println(DB_URL);
         Class.forName(DB_Driver);
         jokesTable = new JokesTable();
+        userTable = new UserTable();
         createTables();
         /*
         try {
@@ -42,10 +46,11 @@ public class SqlController {
 
     public void createTables() throws SQLException{
         jokesTable.createTable();
+        userTable.createTable();
     }
     public void close(){
         jokesTable.close();
-
+        userTable.close();
     }
 
     public static Connection getConnection() throws SQLException{
@@ -112,5 +117,135 @@ public class SqlController {
             ans = ans  + jokesList.get(i).JokeText + "\n";
         }
         return ans;
+    }
+
+    /**
+     * Получить пользователя по его телеграм айди
+     * @param TelegramId
+     * @return
+     * @throws SQLException
+     * @throws IOException
+     */
+    public UserModel getUserByTelegramId(int TelegramId) throws SQLException, IOException {
+        return userTable.getUserByTelegramId(TelegramId);
+    }
+
+
+    /**
+     *  Получить пользователя по его айди в базе
+     * @param BaseId
+     * @return
+     * @throws SQLException
+     * @throws IOException
+     */
+    public UserModel getUserByBaseId(int BaseId) throws SQLException, IOException {
+        return userTable.getUserByBaseId(BaseId);
+    }
+
+
+
+
+    /**
+     * Существует ли такой пользователь в Базе данных ( по его телеграмм айди)
+     * @return
+     * @throws SQLException
+     */
+    public boolean IsUserExists(long TelegramId) throws SQLException {
+        return userTable.IsUserExists(TelegramId);
+    }
+    /**
+     * Добавить пользователя (по UserModel) (пока не отличается от телеграм айди)
+     * @param user
+     * @return
+     * @throws SQLException
+     * @throws IOException
+     */
+    public boolean addUser(UserModel user) throws SQLException, IOException {
+        return userTable.addUser(user);
+    }
+    /**
+     * Добавить пользователя (по телеграм айди)
+     * @param Telegram_id
+     * @return
+     * @throws SQLException
+     * @throws IOException
+     */
+    public boolean addUser(int Telegram_id) throws SQLException, IOException {
+        return userTable.addUser(Telegram_id);
+    }
+
+    /**
+     * Пользователь посмотрел данную шутку
+     * @param Telegram_id
+     * @param JokeId
+     * @throws SQLException
+     * @throws IOException
+     */
+    public void seenJoke(long Telegram_id, int JokeId) throws SQLException, IOException {
+        userTable.seenJoke(Telegram_id, JokeId);
+    }
+
+    /**
+     * Проверить, посмотрел ли пользователь эту шутку
+     * @param Telegram_id
+     * @param JokeId
+     * @return
+     * @throws SQLException
+     * @throws IOException
+     */
+    public boolean IsSeenJoke(long Telegram_id,int JokeId) throws SQLException, IOException{
+        return userTable.IsSeenJoke(Telegram_id, JokeId);
+    }
+
+    /**
+     * Получить случайную шутку из Базы данных
+     * @return
+     * @throws SQLException
+     */
+    public JokesModel getRandomJoke() throws SQLException {
+        return jokesTable.getRandomJoke();
+    }
+
+    /**
+     * Сколько шуток в базе данных
+     * @return
+     * @throws SQLException
+     */
+    public int getNumberOfJokes() throws SQLException {
+        return jokesTable.getNumberOfJokes();
+    }
+
+    /**
+     *  Сохранить последнюю просмотренную шутку
+     * @param telegram_id
+     * @param JokeId
+     * @throws SQLException
+     */
+    public void savePrevJoke(long telegram_id, int JokeId) throws SQLException {
+        userTable.savePrevJoke(telegram_id,JokeId);
+    }
+
+    /**
+     * Получить время отправки анекдотов у пользователя
+     * @param Telegram_id
+     * @return -1 - значит нет такого пользователя
+     * @throws SQLException
+     */
+    public int getUserTime(long Telegram_id) throws SQLException {
+        return userTable.getUserTime(Telegram_id);
+    }
+
+
+
+
+    /**
+     * Установить время отправки анекдотов у пользователя
+     * @param telegram_id
+     * @param time - время в секундах от начала дня
+     * @return -1 - значит нет такого пользователя
+     * @throws SQLException
+     */
+    public void setUserTime(long telegram_id, int time) throws SQLException {
+        userTable.setUserTime(telegram_id, time);
     }
 }

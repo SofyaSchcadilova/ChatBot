@@ -40,7 +40,7 @@ public class Logic {
      * Хранение коллекции id пользователей, чтобы принимать новые анекдоты
      */
 
-    static Set<Long> userWithJoke= new TreeSet<>();
+    static Set<Long> userWithJoke = new TreeSet<>();
 
     void addUserWithJoke(Long chatID){
         userWithJoke.add(chatID);
