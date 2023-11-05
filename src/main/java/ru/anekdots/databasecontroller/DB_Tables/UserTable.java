@@ -214,7 +214,7 @@ public class UserTable extends  BaseTable implements TableOperations{
      * @throws SQLException
      * @throws IOException
      */
-    public void seenJoke(long Telegram_id, int JokeId) throws SQLException, IOException {
+    public void setSeenJoke(long Telegram_id, int JokeId) throws SQLException, IOException {
         ResultSet rs = executeSqlStatement("SELECT * FROM Users WHERE (telegram_id="+ Telegram_id +")");
         if (!rs.next()){
             return;
@@ -269,6 +269,14 @@ public class UserTable extends  BaseTable implements TableOperations{
         if (!IsUserExists(telegram_id)) {
             throw new SQLException("Нет такого пользователя");
         }
-        executeSqlStatement("UPDATE Users SET time =" + time + " WHERE telegram_id =" + telegram_id);
+        executeSqlStatement("UPDATE Users SET time =" + String.valueOf(time) + " WHERE telegram_id =" + telegram_id);
     }
+
+    public void setState(long telegram_id, int state) throws SQLException {
+        if (!IsUserExists(telegram_id)) {
+            throw new SQLException("Нет такого пользователя");
+        }
+        executeSqlStatement("UPDATE Users SET state =" + String.valueOf(state) + " WHERE telegram_id =" + telegram_id);
+    }
+
 }

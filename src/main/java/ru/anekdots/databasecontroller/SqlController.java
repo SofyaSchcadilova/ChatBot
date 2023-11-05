@@ -181,8 +181,8 @@ public class SqlController {
      * @throws SQLException
      * @throws IOException
      */
-    public void seenJoke(long Telegram_id, int JokeId) throws SQLException, IOException {
-        userTable.seenJoke(Telegram_id, JokeId);
+    public void setSeenJoke(long Telegram_id, int JokeId) throws SQLException, IOException {
+        userTable.setSeenJoke(Telegram_id, JokeId);
     }
 
     /**

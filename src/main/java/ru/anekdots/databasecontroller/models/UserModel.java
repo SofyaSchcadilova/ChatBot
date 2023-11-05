@@ -11,8 +11,10 @@ public class UserModel extends BaseModel{
     public long Telegram_id;
 
     /**
+     * Не использовать напрямую
      * Просмотренные шутки
      * Хранится как маска, где i-ая позиция бита это просмотренная шутка с айди i
+     * Не использовать напрямую
      */
     public ArrayList<Boolean> SeenJokes;
     /**
