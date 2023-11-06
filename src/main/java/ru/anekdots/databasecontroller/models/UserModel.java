@@ -17,12 +17,17 @@ public class UserModel extends BaseModel{
      * Не использовать напрямую
      */
     public ArrayList<Boolean> SeenJokes;
+
+
     /**
      * 0 - свободное состояние
      * 1 - ожидание отправки сообщения
      * 2 - ожидание оценки(необязательно состояние)
      */
     public int State;
+
+
+
     /**
      * айди прошлой шутки
      */

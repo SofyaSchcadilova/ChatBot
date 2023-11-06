@@ -126,7 +126,7 @@ public class SqlController {
      * @throws SQLException
      * @throws IOException
      */
-    public UserModel getUserByTelegramId(int TelegramId) throws SQLException, IOException {
+    public UserModel getUserByTelegramId(long TelegramId) throws SQLException, IOException {
         return userTable.getUserByTelegramId(TelegramId);
     }
 
@@ -170,7 +170,7 @@ public class SqlController {
      * @throws SQLException
      * @throws IOException
      */
-    public boolean addUser(int Telegram_id) throws SQLException, IOException {
+    public boolean addUser(long Telegram_id) throws SQLException, IOException {
         return userTable.addUser(Telegram_id);
     }
 
@@ -248,4 +248,15 @@ public class SqlController {
     public void setUserTime(long telegram_id, int time) throws SQLException {
         userTable.setUserTime(telegram_id, time);
     }
+
+    /**
+     *  Установка состояния пользователя
+     * @param telegram_id
+     * @param state
+     * @throws SQLException
+     */
+    public void setState(long telegram_id, int state) throws SQLException {
+        userTable.setState(telegram_id,state);
+    }
+
 }

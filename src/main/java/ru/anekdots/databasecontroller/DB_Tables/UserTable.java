@@ -34,9 +34,9 @@ public class UserTable extends  BaseTable implements TableOperations{
                 "id BIGINT AUTO_INCREMENT PRIMARY KEY," +
                 "telegram_id BIGINT NOT NULL," +
                 "state INTEGER NOT NULL," +
-                "seenJokes BINARY(255))," +
+                "seenJokes BINARY(255)," +
                 "prevJoke INTEGER NOT NULL," +
-                "time INTEGER NOT NULL","Создана таблица " + tableName);
+                "time INTEGER)","Создана таблица " + tableName);
 
     }
 
