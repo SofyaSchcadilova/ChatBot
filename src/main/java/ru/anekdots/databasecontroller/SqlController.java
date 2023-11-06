@@ -259,4 +259,10 @@ public class SqlController {
         userTable.setState(telegram_id,state);
     }
 
+    /**
+     * {@link UserTable#getAllUsers()}
+     */
+    public List<UserModel> getAllUsers() throws SQLException {
+        return  userTable.getAllUsers();
+    }
 }
