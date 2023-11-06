@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.List;
 
 
 /**
@@ -277,6 +278,29 @@ public class UserTable extends  BaseTable implements TableOperations{
             throw new SQLException("Нет такого пользователя");
         }
         executeSqlStatement("UPDATE Users SET state =" + String.valueOf(state) + " WHERE telegram_id =" + telegram_id);
+    }
+
+    /**
+     * Получить всех пользователей из базы данных (Без их массива просмотренных шуток)
+     *
+     *
+     * @return List[UserModel]
+     * @throws SQLException
+     */
+    public List<UserModel> getAllUsers() throws SQLException {
+        ArrayList<UserModel> ans = new ArrayList<UserModel>();
+        ResultSet rs = executeSqlStatement("SELECT * FROM Users");
+        while (rs.next()){
+            ans.add(new UserModel(rs.getInt("id"),
+                        rs.getLong("telegram_id"),
+                        rs.getInt("state"),
+                        null,
+                        rs.getInt("prevJoke"),
+                        rs.getInt("time")
+                        )
+                    );
+        }
+        return ans;
     }
 
 }
