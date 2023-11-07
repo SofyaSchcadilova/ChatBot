@@ -1,11 +1,5 @@
 package ru.anekdots.resourses;
 
-import ru.anekdots.databasecontroller.SqlControler;
-import ru.anekdots.databasecontroller.models.JokesModel;
-
-import java.sql.SQLException;
-import java.util.List;
-
 /**
  *  Ответы бота /
  *  Строки, которыми отвечает бот

@@ -11,7 +11,7 @@ interface Bot {
 
     String getBotToken();
 
-    void sendMessage(String text, long chatId);
+    void sendMessage(LogicAnswer textAnswer, long chatId);
 
 
 }
