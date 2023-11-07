@@ -1,9 +1,11 @@
 package ru.anekdots.bot;
 
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import com.vdurmont.emoji.EmojiParser;
 import ru.anekdots.databasecontroller.SqlController;
 
 import ru.anekdots.databasecontroller.models.JokesModel;
+import ru.anekdots.databasecontroller.models.UserModel;
 import ru.anekdots.resourses.answers;
 
 import java.io.IOException;
@@ -52,40 +54,68 @@ public class Logic {
      * @param rawText "сырой" текст
       */
 
-    String think(String rawText, Long userId) throws SQLException, IOException {
+    LogicAnswer think(String rawText, Long userId) throws SQLException, IOException {
         String answer;
+        LogicAnswer logicAnswer;
+        String evaluationKeyboard = "evaluationKeyboard";
+        String menuKeyboard = "menuKeyboard";
 
         if (!DB.IsUserExists(userId)){
             DB.addUser(userId);
             DB.setState(userId, 0);
         }
+        UserModel cur_user = DB.getUserByTelegramId(userId);
 
-
-        if (DB.getUserByTelegramId(userId).State == 1){
-
+        if (cur_user.State == 1){
             try {
                 if (DB.addJoke(rawText)) {
-                    DB.addJoke(rawText);
                     DB.setState(userId, 0);
-                    return "Анекдот добавлен!";
+                    return new LogicAnswer("Анекдот добавлен!", menuKeyboard);
                 } else {
                     DB.setState(userId, 0);
-                    return "Такой анекдот уже есть!";
+                    return new LogicAnswer("Такой анекдот уже есть!", menuKeyboard);
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
 
+        if (cur_user.State == 3){
+            try {
+                DB.setState(userId, 0);
+                int n = Integer.parseInt(rawText);
+                return new LogicAnswer(DB.getBestJokes(n), menuKeyboard);
+            }
+            catch (NumberFormatException nfe)
+            {
+                DB.setState(userId, 0);
+                return new LogicAnswer("В следующий раз введи число!", menuKeyboard);
+            }
+        }
+
+       if (cur_user.State == 2) {
+           while (!rawText.equals(EmojiParser.parseToUnicode("\uD83D\uDC4D"))
+                   && !rawText.equals(EmojiParser.parseToUnicode("\uD83D\uDC4E")))
+               return new LogicAnswer(EmojiParser.parseToUnicode
+                       ("Пожалуйста, оцени анекдот"), evaluationKeyboard);
+           if (EmojiParser.parseToUnicode("\uD83D\uDC4D").equals(rawText))
+               DB.changeRate(cur_user.PrevJoke, true);
+           else if (EmojiParser.parseToUnicode("\uD83D\uDC4E").equals(rawText))
+               DB.changeRate(cur_user.PrevJoke, false);
+
+           DB.setState(cur_user.Telegram_id,0);
+           return new LogicAnswer("Спасибо за оценку!", menuKeyboard);
+       }
 
 
-        if (((rawText.charAt(2) == ':') || (rawText.charAt(1) == ':')) && (rawText.length() <= 5)) {
+
+        if ((rawText.length() == 5) && ((rawText.charAt(2) == ':') || (rawText.charAt(1) == ':'))) {
             Pattern pattern = Pattern.compile("^([01]?[0-9]|2[0-3]):[0-5][0-9]$");
             Matcher matcher = pattern.matcher(rawText);
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
             sdf.setLenient(false);
             if (!matcher.matches()) {
-                return "Введи время в формате hh:mm";
+                return new LogicAnswer("Введи время в формате hh:mm", menuKeyboard);
             }
             try {
                 Date parsedDate = sdf.parse(rawText);
@@ -101,11 +131,11 @@ public class Logic {
                     Duration duration = Duration.between(midnight, timeForJoke);
                     int secondsSinceStartOfDay = (int) duration.getSeconds();
                     DB.setUserTime(userId, secondsSinceStartOfDay);
-                    return "Хорошо! Жди анекдот в " + rawText;
+                    return new LogicAnswer("Хорошо! Жди анекдот в " + rawText, menuKeyboard);
                 }
-                return "Введи время в формате hh:mm";
+                return new LogicAnswer("Введи время в формате hh:mm", menuKeyboard);
             } catch (ParseException e) {
-                return "Введи время в формате hh:mm";
+                return new LogicAnswer("Введи время в формате hh:mm", menuKeyboard);
             }
         }
 
@@ -113,12 +143,13 @@ public class Logic {
         switch (rawText) {
             case ("/start"):
                 answer = answers._START;
+                logicAnswer = new LogicAnswer(answer, menuKeyboard);
                 break;
             case ("/help"), ("нужна помощь"):
                 answer = answers._HELP;
+                logicAnswer = new LogicAnswer(answer, menuKeyboard);
                 break;
-
-            case ("анекдот"):
+            case ("/needjoke"), ("нужен анекдот"):
                 int numberOfJokes = DB.getNumberOfJokes(); //число всех шуток в базе
                 int sentJokes = 0; //число отправленных шуток, если = numberOfJokes, то отправляется текст "шутки закончились"
                 for (int i = 1; i <= numberOfJokes; i++){
@@ -127,33 +158,45 @@ public class Logic {
                     }
                 }
                 if (sentJokes == numberOfJokes){
-                    return "Анекдоты закончились((\nПодожди пока появятся новые или предложи свой!";
+                    return new LogicAnswer(
+                            "Шутки кончились...\nПодожди пока появятся новые или предложи свои!",
+                            menuKeyboard);
                 } else {
                     while (true) {
                         JokesModel joke = DB.getRandomJoke();
                         if (!DB.IsSeenJoke(userId, joke.getId()) && joke.rate>-5) { //анекдот уже отправлялся
                             DB.setSeenJoke(userId, joke.getId());
                             DB.savePrevJoke(userId, joke.getId());
-                            return joke.JokeText;
+                            DB.setState(userId, 2);
+                            return new LogicAnswer(joke.JokeText, evaluationKeyboard);
                         }
                     }
                 }
-            case ("предложить анекдот"):
+            case ("/suggest"), ("предложить анекдот"):
                 DB.setState(userId, 1);
                 answer = "Введите анекдот";
+                logicAnswer = new LogicAnswer(answer, null);
                 break;
-            case ("время"):
+            case ("/joketime"), ("время анекдота"):
                 answer = "Введите время, в которое я буду отправлять тебе анекдот, в формате hh:mm";
+                logicAnswer = new LogicAnswer(answer, null);
                 break;
-            case ("/getall"):
+            case ("/getall"), ("все анекдоты"):
                 answer = DB.getAllJokes();
+                logicAnswer = new LogicAnswer(answer, menuKeyboard);
+                break;
+            case ("/gettop"), ("лучшие анекдоты"):
+                answer = "Введите количество шуток";
+                logicAnswer = new LogicAnswer(answer, null);
+                DB.setState(userId, 3);
                 break;
 
             default:
                 answer = "Я не знаю такую команду :(\nВведи /help для справки";
+                logicAnswer = new LogicAnswer(answer, menuKeyboard);
                 break;
             }
-        return answer;
+        return logicAnswer;
     }
 
     public void close(){
