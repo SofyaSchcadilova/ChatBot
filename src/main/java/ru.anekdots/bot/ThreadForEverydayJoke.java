@@ -26,7 +26,6 @@ public class ThreadForEverydayJoke implements Runnable{
     public void run(){
         try {
             List<UserModel> users;
-            System.out.println("УРА");
             while (true){
                 users = bot.logic.DB.getAllUsers();
                 for (UserModel user : users){
@@ -35,7 +34,6 @@ public class ThreadForEverydayJoke implements Runnable{
                     if (user.Time == -1){
                         continue;
                     }
-                    System.out.println(user.Time);
                     if (timeNow/60 == user.Time/60) {
                         bot.sendMessage(bot.logic.think("нужен анекдот", user.Telegram_id), user.Telegram_id);
                     }
