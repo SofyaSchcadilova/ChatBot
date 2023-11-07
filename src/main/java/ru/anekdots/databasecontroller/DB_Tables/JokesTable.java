@@ -141,7 +141,7 @@ public class JokesTable extends BaseTable implements TableOperations{
         if (up) curRate += 1;
         else curRate -= 1;
 
-        executeSqlStatement("UPDATE Jokes SET rate = "+ curRate);
+        executeSqlStatement("UPDATE Jokes SET rate = "+ curRate + " WHERE (id= "+jokeId+")");
     }
 
     /**
