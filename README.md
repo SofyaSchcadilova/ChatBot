@@ -10,7 +10,7 @@ Current Features:
 
       -Возможность получения ежедневных шуток
      
-Write Bot's token and name into AnekBot/src/main/java/ru.anekdots/resourses/botsdata.java
+Токен бота и его имя прописываются в AnekBot/src/main/java/ru.anekdots/resourses/botsdata.java
 
 
 Вторая задача:
