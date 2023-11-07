@@ -1,8 +1,11 @@
 package ru.anekdots.bot;
 
+import org.glassfish.hk2.api.ServiceLocatorFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.anekdots.databasecontroller.SqlController;
 import ru.anekdots.resourses.botsdata;
@@ -53,14 +56,18 @@ public class TelegramBot extends TelegramLongPollingBot implements Bot{
 
     /**
      * Отправка сообщения
-     * @param text текст сообщения
+     * @param textAnswer текст сообщения
      * @param chatId айди чата
      */
     @Override
-    public void sendMessage(String text, long chatId) {
+    public void sendMessage(LogicAnswer textAnswer, long chatId) {
         SendMessage message = new SendMessage();
-        message.setText(text);
+        message.setText(textAnswer.getAnswer());
         message.setChatId(String.valueOf(chatId));
+
+        if (textAnswer.getKeyboardType() != null)
+            message.setReplyMarkup((ReplyKeyboard) textAnswer.getKeyboardType());
+
         try {
             execute(message);
         }
