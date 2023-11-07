@@ -1,5 +1,6 @@
 package ru.anekdots.bot;
 
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import com.vdurmont.emoji.EmojiParser;
 import ru.anekdots.databasecontroller.SqlController;
 
