@@ -14,7 +14,11 @@ public class Main {
     public static void main(String[] args) throws TelegramApiException, SQLException, ClassNotFoundException, IOException {
 
 
+
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
-        telegramBotsApi.registerBot(new TelegramBot());
+        TelegramBot tgbot = new TelegramBot();
+        telegramBotsApi.registerBot(tgbot);
+        Thread threadForEverydayJoke = new Thread(tgbot.thread);
+        threadForEverydayJoke.start();
     }
 }

@@ -8,6 +8,7 @@ import ru.anekdots.databasecontroller.models.UserModel;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -216,6 +217,26 @@ public class SqlController {
     }
 
     /**
+     * Получить лучшие n шуток
+     * @param n Количество шуток
+     * @return
+     * @throws SQLException
+     */
+    public String getBestJokes(int n) throws SQLException {
+        List<JokesModel> jokesList = jokesTable.getBestJokes(n);
+        if (jokesList.isEmpty())
+            return "Пока наша база шуток пуста! Но вы можете добавить свой анекдот:)";
+        else if(n > jokesList.size())
+            return "Пока у нас нет столько шуток o_O \n Но вы можете увеличить их количество, добавив свой анекдот.";
+        else{
+            String ans = "";
+            for (int i = 0; i < n; i++)
+                ans = ans + jokesList.get(i).JokeText + "\n";
+            return ans;
+        }
+    }
+
+    /**
      *  Сохранить последнюю просмотренную шутку
      * @param telegram_id
      * @param JokeId
@@ -224,6 +245,8 @@ public class SqlController {
     public void savePrevJoke(long telegram_id, int JokeId) throws SQLException {
         userTable.savePrevJoke(telegram_id,JokeId);
     }
+
+
 
     /**
      * Получить время отправки анекдотов у пользователя
@@ -259,4 +282,20 @@ public class SqlController {
         userTable.setState(telegram_id,state);
     }
 
+    /**
+     * {@link UserTable#getAllUsers()}
+     */
+    public List<UserModel> getAllUsers() throws SQLException {
+        return  userTable.getAllUsers();
+    }
+
+    /**
+     * Изменить рейтинг
+     * @param up true если поднять, false если опустить
+     *
+     * @throws SQLException
+     */
+    public void changeRate(int jokeId, boolean up) throws SQLException {
+        jokesTable.changeRate(jokeId,up);
+    }
 }
