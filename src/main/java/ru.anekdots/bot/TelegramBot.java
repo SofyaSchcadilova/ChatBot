@@ -115,7 +115,7 @@ public class TelegramBot extends TelegramLongPollingBot implements Bot{
                         }
                         System.out.println(user.Time);
                         if (timeNow/60 == user.Time/60) {
-                            sendMessage(logic.think("анекдот", user.Telegram_id), user.Telegram_id);
+                            sendMessage(logic.think("нужен анекдот", user.Telegram_id), user.Telegram_id);
                         }
                     }
                     Thread.sleep(60000);
