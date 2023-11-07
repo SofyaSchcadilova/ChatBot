@@ -6,10 +6,7 @@ package ru.anekdots.databasecontroller.models;
 public class JokesModel extends BaseModel{
 
     public String JokeText;
-    /**
-     * Количество голосов
-     */
-    public int rates;
+
     /**
      * Сумма очков
      */
@@ -18,18 +15,15 @@ public class JokesModel extends BaseModel{
     public JokesModel(int id){
         super(id);
         rate = 0;
-        rates = 0;
     }
 
-    public JokesModel(int id, String text){
-        super(id);
-        rate = 0;
-        rates = 0;
+    public JokesModel(String text, int rate){
+        super(-1);
+        this.rate = rate;
         JokeText = text;
     }
-    public JokesModel(int id, String text, int rate, int rates){
+    public JokesModel(int id, String text, int rate){
         super(id);
-        this.rates = rates;
         this.rate = rate;
         JokeText = text;
     }

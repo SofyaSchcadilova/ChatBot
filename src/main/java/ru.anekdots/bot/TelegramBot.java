@@ -6,11 +6,18 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.anekdots.databasecontroller.SqlController;
 import ru.anekdots.resourses.botsdata;
 
+import java.io.IOException;
 import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import java.time.LocalTime;
+import java.util.Date;
+
 
 /***
  * Класс телеграм бота
@@ -85,7 +92,7 @@ public class TelegramBot extends TelegramLongPollingBot implements Bot{
         String text = update.getMessage().getText();
         try {
             sendMessage(logic.think(text, chatId), chatId);
-        } catch (SQLException e) {
+        } catch (SQLException | IOException e) {
             throw new RuntimeException(e);
         }
     }
