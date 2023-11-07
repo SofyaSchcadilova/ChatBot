@@ -45,6 +45,7 @@ public class TelegramBot extends TelegramLongPollingBot implements Bot{
 
     public TelegramBot() throws SQLException, ClassNotFoundException {
         logic = new Logic(this);
+        thread = new ThreadForEverydayJoke();
     }
 
     /**
