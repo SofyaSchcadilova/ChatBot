@@ -1,5 +1,6 @@
 package ru.anekdots.bot;
 
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import ru.anekdots.databasecontroller.SqlController;
 
 import ru.anekdots.databasecontroller.models.JokesModel;
@@ -63,6 +64,7 @@ public class Logic {
 
 
         if (DB.getUserByTelegramId(userId).State == 1){
+
             try {
                 if (DB.addJoke(rawText)) {
                     DB.addJoke(rawText);
@@ -114,9 +116,10 @@ public class Logic {
             case ("/start"):
                 answer = answers._START;
                 break;
-            case ("/help"):
+            case ("/help"), ("нужна помощь"):
                 answer = answers._HELP;
                 break;
+
             case ("анекдот"):
                 int numberOfJokes = DB.getNumberOfJokes(); //число всех шуток в базе
                 int sentJokes = 0; //число отправленных шуток, если = numberOfJokes, то отправляется текст "шутки закончились"
@@ -147,6 +150,8 @@ public class Logic {
             case ("/getall"):
                 answer = DB.getAllJokes();
                 break;
+            //case ()
+
             default:
                 answer = "Я не знаю такую команду :(\nВведи /help для справки";
                 break;
