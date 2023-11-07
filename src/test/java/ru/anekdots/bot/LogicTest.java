@@ -89,17 +89,21 @@ public class LogicTest {
     @Test
     public void thinkTest_getRandomJokeFromDataBase() throws SQLException, IOException {
         SqlController sqlController = Mockito.mock(SqlController.class);
-        Logic logic = new Logic(sqlController);
+
         UserModel user = new UserModel(1,3L, 0, null);
         JokesModel joke1 = new JokesModel(1, "анек1", 0);
+
+
+        Mockito.when(sqlController.getJokeById(1)).thenReturn(joke1);
 
         Mockito.when(sqlController.getUserByTelegramId(3L)).thenReturn(user);
         Mockito.when(sqlController.addUser(3L)).thenReturn(true);
 
-        Mockito.when(sqlController.getNumberOfJokes()).thenReturn(2);
+        Mockito.when(sqlController.getNumberOfJokes()).thenReturn(1);
         Mockito.when(sqlController.IsSeenJoke(3L, 1)).thenReturn(false);
         Mockito.when(sqlController.getRandomJoke()).thenReturn(joke1);
 
+        Logic logic = new Logic(sqlController);
         Assert.assertEquals( "анек1", logic.think("нужен анекдот", 3L).getAnswer());
     }
     @Test

@@ -31,7 +31,7 @@ public class TelegramBot extends TelegramLongPollingBot implements Bot{
      * Подключение основной логики
      */
 
-    private Logic logic;
+    public Logic logic;
     /**
      * Имя бота
      */
@@ -41,10 +41,11 @@ public class TelegramBot extends TelegramLongPollingBot implements Bot{
      */
     private String Token = botsdata.TOKEN;
 
-    public TelegramBot.ThreadForEverydayJoke thread;
 
-    public TelegramBot() throws SQLException, ClassNotFoundException {
+    public TelegramBot() throws SQLException, ClassNotFoundException, InterruptedException {
         logic = new Logic(this);
+
+
     }
 
     /**
@@ -97,36 +98,6 @@ public class TelegramBot extends TelegramLongPollingBot implements Bot{
         }
     }
 
-    /**
-     * Открывается поток для проверки времени
-     */
-    public class ThreadForEverydayJoke implements Runnable{
-        @Override
-        public void run(){
-            try {
-                List<UserModel> users;
-                while (true){
-                    users = logic.DB.getAllUsers();
-                    for (UserModel user : users){LocalTime currentTime = LocalTime.now();
-                        int timeNow = currentTime.toSecondOfDay();
-                        if (user.Time == -1){
-                            continue;
-                        }
-                        System.out.println(user.Time);
-                        if (timeNow/60 == user.Time/60) {
-                            sendMessage(logic.think("анекдот", user.Telegram_id), user.Telegram_id);
-                        }
-                    }
-                    Thread.sleep(60000);
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
 
-        }
-    }
+
 }

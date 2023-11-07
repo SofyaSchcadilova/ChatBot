@@ -153,7 +153,7 @@ public class Logic {
                 int numberOfJokes = DB.getNumberOfJokes(); //число всех шуток в базе
                 int sentJokes = 0; //число отправленных шуток, если = numberOfJokes, то отправляется текст "шутки закончились"
                 for (int i = 1; i <= numberOfJokes; i++){
-                    if (DB.IsSeenJoke(userId, i)) { //анекдот уже отправлялся
+                    if (DB.IsSeenJoke(userId, i) || DB.getJokeById(i).rate <=-5 ) { //анекдот уже отправлялся
                         sentJokes += 1;
                     }
                 }
@@ -164,7 +164,7 @@ public class Logic {
                 } else {
                     while (true) {
                         JokesModel joke = DB.getRandomJoke();
-                        if (!DB.IsSeenJoke(userId, joke.getId())) { //анекдот уже отправлялся
+                        if (!DB.IsSeenJoke(userId, joke.getId()) && joke.rate>-5) { //анекдот уже отправлялся
                             DB.setSeenJoke(userId, joke.getId());
                             DB.savePrevJoke(userId, joke.getId());
                             DB.setState(userId, 2);

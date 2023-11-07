@@ -151,7 +151,7 @@ public class JokesTable extends BaseTable implements TableOperations{
      * @throws SQLException
      */
     public ArrayList<JokesModel> getBestJokes(int n) throws SQLException {
-        ResultSet rs = executeSqlStatement("SELECT *" + "FROM Jokes ORDER BY rate");
+        ResultSet rs = executeSqlStatement("SELECT TOP " + n + " *  FROM Jokes\n ORDER BY rate DESC");
         ArrayList<JokesModel> ans = new ArrayList<JokesModel>();
         while (rs.next()){
             ans.add(
