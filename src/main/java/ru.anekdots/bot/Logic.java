@@ -12,8 +12,6 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.time.LocalTime;
@@ -124,7 +122,7 @@ public class Logic {
                 int numberOfJokes = DB.getNumberOfJokes(); //число всех шуток в базе
                 int sentJokes = 0; //число отправленных шуток, если = numberOfJokes, то отправляется текст "шутки закончились"
                 for (int i = 1; i <= numberOfJokes; i++){
-                    if (DB.IsSeenJoke(userId, i)) { //анекдот уже отправлялся
+                    if (DB.IsSeenJoke(userId, i) && DB.getJokeById(i).rate<=-5) { //анекдот уже отправлялся
                         sentJokes += 1;
                     }
                 }
@@ -133,7 +131,7 @@ public class Logic {
                 } else {
                     while (true) {
                         JokesModel joke = DB.getRandomJoke();
-                        if (!DB.IsSeenJoke(userId, joke.getId())) { //анекдот уже отправлялся
+                        if (!DB.IsSeenJoke(userId, joke.getId()) && joke.rate>-5) { //анекдот уже отправлялся
                             DB.setSeenJoke(userId, joke.getId());
                             DB.savePrevJoke(userId, joke.getId());
                             return joke.JokeText;
@@ -150,7 +148,6 @@ public class Logic {
             case ("/getall"):
                 answer = DB.getAllJokes();
                 break;
-            //case ()
 
             default:
                 answer = "Я не знаю такую команду :(\nВведи /help для справки";
