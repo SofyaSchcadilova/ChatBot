@@ -110,6 +110,7 @@ public class LogicTest {
         }
     }
     @Test
+
     public void thinkTest_getAll() throws SQLException, IOException {
         String joke1 = "смешной анек";
         String joke2 = "не смешной анек";
@@ -169,7 +170,6 @@ public class LogicTest {
         Mockito.when(sqlController.getRandomJoke()).thenReturn(joke1);
         Mockito.when(sqlController.IsSeenJoke(3L, 2)).thenReturn(true);
         Mockito.when(sqlController.getRandomJoke()).thenReturn(joke2);
-
 
 
         Assert.assertEquals( "Шутки кончились...\nПодожди пока появятся новые или предложи свои!", logic.think("нужен анекдот", 3L).getAnswer());
