@@ -2,13 +2,13 @@
 
 Current Features: 
 
-      -Echo bot
-
-Future Features:
-
-      -Bot that sends you jokes 
+      -Бот, который присылает вам шутки
       
-      -Database of hundreds jokes
+      -База, хранящая шутки
+
+      -Присылаются уникальные, уже не отправленные, шутки
+
+      -Возможность получения ежедневных шуток
      
 Write Bot's token and name into AnekBot/src/main/java/ru.anekdots/resourses/botsdata.java
 
