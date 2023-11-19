@@ -31,7 +31,7 @@ public class Logic {
     /**
      * Управление базой данных
      */
-    SqlController DB;
+    public SqlController DB;
 
 
     public Logic(SqlController sql){
