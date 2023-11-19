@@ -1,6 +1,5 @@
 package ru.anekdots.bot;
 
-import ru.anekdots.databasecontroller.SqlController;
 import ru.anekdots.databasecontroller.models.UserModel;
 
 import java.io.IOException;

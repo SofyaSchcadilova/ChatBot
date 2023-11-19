@@ -1,0 +1,8 @@
+2023-11-07 19:36:29.497338+05:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "UPDATE Jokes SET rate = 1WHERE (id=[*]) 1)"; ожидалось "ALL (, ANY (, SOME ("
+Syntax error in SQL statement "UPDATE Jokes SET rate = 1WHERE (id=[*]) 1)"; expected "ALL (, ANY (, SOME ("; SQL statement:
+UPDATE Jokes SET rate = 1WHERE (id=) 1) [42001-224]
+2023-11-07 19:36:35.221718+05:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "UPDATE Jokes SET rate = 1WHERE (id=[*]) 1)"; ожидалось "ALL (, ANY (, SOME ("
+Syntax error in SQL statement "UPDATE Jokes SET rate = 1WHERE (id=[*]) 1)"; expected "ALL (, ANY (, SOME ("; SQL statement:
+UPDATE Jokes SET rate = 1WHERE (id=) 1) [42001-224]
