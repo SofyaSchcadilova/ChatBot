@@ -15,10 +15,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-<<<<<<< Updated upstream
-=======
 import java.util.List;
->>>>>>> Stashed changes
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.time.LocalTime;
@@ -62,11 +59,8 @@ public class Logic {
     public LogicAnswer think(String rawText, Long userId) throws SQLException, IOException {
         String answer;
         LogicAnswer logicAnswer;
-<<<<<<< Updated upstream
-=======
         WebSearch webSearch = new WebSearch();
         HtmlGetter htmlGetter = new HtmlGetter();
->>>>>>> Stashed changes
         String evaluationKeyboard = "evaluationKeyboard";
         String menuKeyboard = "menuKeyboard";
 
@@ -150,8 +144,6 @@ public class Logic {
         }
 
         rawText = rawText.toLowerCase();
-<<<<<<< Updated upstream
-=======
 
         if (rawText.charAt(0) == 'а') {
             String jokeAbout = "анекдот про ";
@@ -171,9 +163,6 @@ public class Logic {
             }
         }
 
-
-
->>>>>>> Stashed changes
         switch (rawText) {
             case ("/start"):
                 answer = answers._START;
