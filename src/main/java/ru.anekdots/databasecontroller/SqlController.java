@@ -8,7 +8,6 @@ import ru.anekdots.databasecontroller.models.UserModel;
 
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

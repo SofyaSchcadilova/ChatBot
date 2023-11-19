@@ -1,10 +1,12 @@
 package ru.anekdots.bot;
 
 
+import ru.anekdots.logic.LogicAnswer;
+
 /**
  * Интерфейс всех ботов
  */
-interface Bot {
+public interface Bot {
 
 
     String getBotUsername();

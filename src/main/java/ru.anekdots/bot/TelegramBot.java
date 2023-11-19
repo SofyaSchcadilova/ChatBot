@@ -1,24 +1,16 @@
 package ru.anekdots.bot;
 
-import org.glassfish.hk2.api.ServiceLocatorFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.anekdots.databasecontroller.SqlController;
-import ru.anekdots.databasecontroller.models.UserModel;
+import ru.anekdots.logic.Logic;
+import ru.anekdots.logic.LogicAnswer;
 import ru.anekdots.resourses.botsdata;
 
 import java.io.IOException;
 import java.sql.SQLException;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import java.time.LocalTime;
-import java.util.Date;
 
 
 /***

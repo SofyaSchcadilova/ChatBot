@@ -1,11 +1,12 @@
-package ru.anekdots.bot;
+package ru.anekdots.logic;
 
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import com.vdurmont.emoji.EmojiParser;
+import ru.anekdots.bot.Bot;
 import ru.anekdots.databasecontroller.SqlController;
 
 import ru.anekdots.databasecontroller.models.JokesModel;
 import ru.anekdots.databasecontroller.models.UserModel;
+import ru.anekdots.logic.LogicAnswer;
 import ru.anekdots.resourses.answers;
 
 import java.io.IOException;
@@ -33,16 +34,16 @@ public class Logic {
     SqlController DB;
 
 
-    Logic(SqlController sql){
+    public Logic(SqlController sql){
         DB = sql;
     }
 
 
-    Logic() throws SQLException, ClassNotFoundException {
+    public Logic() throws SQLException, ClassNotFoundException {
         DB = new SqlController();
     }
 
-    Logic(Bot bot) throws SQLException, ClassNotFoundException {
+    public Logic(Bot bot) throws SQLException, ClassNotFoundException {
         DB = new SqlController();
         this.bot = bot;
     }
@@ -54,7 +55,7 @@ public class Logic {
      * @param rawText "сырой" текст
       */
 
-    LogicAnswer think(String rawText, Long userId) throws SQLException, IOException {
+    public LogicAnswer think(String rawText, Long userId) throws SQLException, IOException {
         String answer;
         LogicAnswer logicAnswer;
         String evaluationKeyboard = "evaluationKeyboard";

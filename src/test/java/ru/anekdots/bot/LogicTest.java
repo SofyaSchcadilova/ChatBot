@@ -2,20 +2,18 @@ package ru.anekdots.bot;
 
 import com.vdurmont.emoji.EmojiParser;
 import org.junit.*;
-import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.rules.TestName;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.anekdots.databasecontroller.SqlController;
 import ru.anekdots.databasecontroller.models.JokesModel;
 import ru.anekdots.databasecontroller.models.UserModel;
+import ru.anekdots.logic.Logic;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalTime;
-import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
