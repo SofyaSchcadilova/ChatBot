@@ -17,7 +17,12 @@ public class HtmlGetter {
         webClient.waitForBackgroundJavaScript(1000); // important! wait until javascript finishes rendering
         HtmlPage page = webClient.getPage(url);
 
-        return page.asXml().replaceFirst("<\\?xml version=\"1.0\" encoding=\"(.+)\"\\?>", "<!DOCTYPE html>");
+        String xPath = "/html/body/div[2]/div[4]/div[1]/div[1]/div[1]";
+
+        DomElement element = page.getFirstByXPath(xPath);
+        String text = element.getTextContent();
+
+        return text;
     }
 
 }

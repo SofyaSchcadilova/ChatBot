@@ -62,6 +62,8 @@ public class Logic implements Closeable {
     public LogicAnswer think(String rawText, Long userId) throws SQLException, IOException {
         String answer;
         LogicAnswer logicAnswer;
+        WebSearch webSearch = new WebSearch();
+        HtmlGetter htmlGetter = new HtmlGetter();
         String evaluationKeyboard = "evaluationKeyboard";
         String menuKeyboard = "menuKeyboard";
 
@@ -145,6 +147,24 @@ public class Logic implements Closeable {
         }
 
         rawText = rawText.toLowerCase();
+
+        if (rawText.charAt(0) == 'а') {
+            String jokeAbout = "анекдот про ";
+            int numberToCheck = 1;
+            for (int i = 1; i < jokeAbout.length(); i++){
+                if (rawText.charAt(i) == jokeAbout.charAt(i)){
+                    numberToCheck += 1;
+                }
+            }
+            if (numberToCheck == jokeAbout.length()){
+                List<String> jokes = webSearch.find(rawText.substring(12));
+                for (String joke : jokes){
+                    logicAnswer = new LogicAnswer(htmlGetter.getHtml(joke), null);
+                    return logicAnswer;
+                }
+            }
+        }
+
         switch (rawText) {
             case ("/start"):
                 answer = answers._START;
