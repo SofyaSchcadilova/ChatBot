@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 public class WebSearch {
     String url; // ?????
 
-    String banned_chars = "[~#@*+%{}<>\\[\\]|\"\\_^]";
+    private final String banned_chars = "[~#@*+%{}<>\\[\\]|\"\\_^]";
 
     public WebSearch( ){
         this.url = "https://www.google.com/search?q=anekdot.ru+";
@@ -32,7 +32,7 @@ public class WebSearch {
 
 
 
-    public boolean isContainBannedChars(String request) {
+    private boolean isContainBannedChars(String request) {
         Pattern pattern = Pattern.compile(banned_chars);
         Matcher matcher = pattern.matcher(request);
         return matcher.find();

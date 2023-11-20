@@ -9,12 +9,14 @@ import ru.anekdots.databasecontroller.models.UserModel;
 import ru.anekdots.logic.LogicAnswer;
 import ru.anekdots.resourses.answers;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.sql.SQLException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.time.LocalTime;
@@ -24,14 +26,16 @@ import java.time.format.DateTimeFormatter;
 /**
  * Основной класс логики
   */
-public class Logic {
+public class Logic implements Closeable {
 
 
-    Bot bot;
+    private Bot bot;
     /**
      * Управление базой данных
      */
-    public SqlController DB;
+    private SqlController DB;
+
+
 
 
     public Logic(SqlController sql){
@@ -198,6 +202,10 @@ public class Logic {
                 break;
             }
         return logicAnswer;
+    }
+
+    public List<UserModel> getAllUsers() throws SQLException {
+        return DB.getAllUsers();
     }
 
     public void close(){
