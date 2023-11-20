@@ -5,12 +5,15 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.anekdots.databasecontroller.models.UserModel;
 import ru.anekdots.logic.Logic;
 import ru.anekdots.logic.LogicAnswer;
 import ru.anekdots.resourses.botsdata;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalTime;
+import java.util.List;
 
 
 /***
@@ -36,7 +39,8 @@ public class TelegramBot extends TelegramLongPollingBot implements Bot{
 
     public TelegramBot() throws SQLException, ClassNotFoundException, InterruptedException {
         logic = new Logic(this);
-
+        Thread thread = new Thread(new ThreadForEverydayJoke());
+        thread.start();
 
     }
 
@@ -91,5 +95,39 @@ public class TelegramBot extends TelegramLongPollingBot implements Bot{
     }
 
 
+    public class ThreadForEverydayJoke implements Runnable{
+
+
+        ThreadForEverydayJoke(){
+
+        };
+        public void run(){
+            try {
+                List<UserModel> users;
+                while (true){
+                    users = logic.getAllUsers();
+                    for (UserModel user : users){
+                        LocalTime currentTime = LocalTime.now();
+                        int timeNow = currentTime.toSecondOfDay();
+                        if (user.Time == -1){
+                            continue;
+                        }
+                        if (timeNow/60 == user.Time/60) {
+                            sendMessage(logic.think("нужен анекдот", user.Telegram_id), user.Telegram_id);
+                        }
+                    }
+
+                    Thread.sleep(60000);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+    }
 
 }
