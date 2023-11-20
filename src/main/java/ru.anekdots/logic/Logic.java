@@ -9,6 +9,7 @@ import ru.anekdots.databasecontroller.models.UserModel;
 import ru.anekdots.logic.LogicAnswer;
 import ru.anekdots.resourses.answers;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -25,14 +26,16 @@ import java.time.format.DateTimeFormatter;
 /**
  * Основной класс логики
   */
-public class Logic {
+public class Logic implements Closeable {
 
 
-    Bot bot;
+    private Bot bot;
     /**
      * Управление базой данных
      */
-    public SqlController DB;
+    private SqlController DB;
+
+
 
 
     public Logic(SqlController sql){
@@ -155,9 +158,8 @@ public class Logic {
             }
             if (numberToCheck == jokeAbout.length()){
                 List<String> jokes = webSearch.find(rawText.substring(12));
-                for (String str : jokes){
-                    //str = htmlGetter.getHtml(str);
-                    logicAnswer = new LogicAnswer(str, null);
+                for (String joke : jokes){
+                    logicAnswer = new LogicAnswer(htmlGetter.getHtml(joke), null);
                     return logicAnswer;
                 }
             }
@@ -220,6 +222,10 @@ public class Logic {
                 break;
             }
         return logicAnswer;
+    }
+
+    public List<UserModel> getAllUsers() throws SQLException {
+        return DB.getAllUsers();
     }
 
     public void close(){
