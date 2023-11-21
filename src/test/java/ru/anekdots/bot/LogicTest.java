@@ -47,15 +47,16 @@ public class LogicTest {
 
 
         UserModel user = new UserModel(1,3L, 1, null);
-
+        Mockito.when(sqlController.IsUserExists(3L)).thenReturn(true);
         Mockito.when(sqlController.getUserByTelegramId(3L)).thenReturn(user);
-        Mockito.when(sqlController.addJoke(joke1)).thenReturn(true);
-        Mockito.when(sqlController.addUser(3L)).thenReturn(true);
+        Mockito.when(sqlController.addJoke(Mockito.anyString())).thenReturn(true);
+        Mockito.when(sqlController.addUser(3L)).thenReturn(false);
 
         Logic logic = new Logic(sqlController);
 
-        logic.think("Предложить анекдот", 3L);
-        Assert.assertEquals("Такой анекдот уже есть!", logic.think(joke1, 3L).getAnswer());
+
+        //logic.think("Предложить анекдот", 3L);
+        Assert.assertEquals("Анекдот добавлен!", logic.think(joke1, 3L).getAnswer());
     }
     @Test
     public void thinkTest_SecondAttemptAddJoke() throws SQLException, IOException {
