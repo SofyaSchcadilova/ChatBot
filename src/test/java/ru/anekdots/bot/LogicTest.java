@@ -1,15 +1,20 @@
 package ru.anekdots.bot;
 
 import com.vdurmont.emoji.EmojiParser;
+import org.htmlunit.WebClient;
 import org.junit.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.rules.TestName;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.anekdots.databasecontroller.SqlController;
 import ru.anekdots.databasecontroller.models.JokesModel;
 import ru.anekdots.databasecontroller.models.UserModel;
+import ru.anekdots.logic.HtmlGetter;
 import ru.anekdots.logic.Logic;
+import ru.anekdots.logic.LogicAnswer;
+import ru.anekdots.logic.WebSearch;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -39,6 +44,7 @@ public class LogicTest {
     @After
     public void afterClass() { System.out.println("Test finished " + testName.getMethodName());
     }
+
 
     @Test
     public void thinkTest_FirstAttemptAddJoke() throws SQLException, IOException {
@@ -220,6 +226,24 @@ public class LogicTest {
         logic.think(EmojiParser.parseToUnicode("\uD83D\uDC4D"), 3L).getAnswer();
         Mockito.doNothing().when(sqlController).changeRate(1, true);
         Assert.assertEquals("Спасибо за оценку!", logic.think(EmojiParser.parseToUnicode("\uD83D\uDC4D"), 3L).getAnswer());
+    }
+
+    /**
+     * Проверка анекдот по теме (анекдот про... и высвечивается анекдот про...)
+     * @throws SQLException
+     * @throws IOException
+     */
+    @Test
+    public void thinkTest_jokeAbout() throws SQLException, IOException{
+        SqlController sqlController = Mockito.mock(SqlController.class);
+        Logic logic = new Logic(sqlController);
+        UserModel user = new UserModel(1,3L, 4, null);
+
+        Mockito.when(sqlController.getUserByTelegramId(3L)).thenReturn(user);
+        Mockito.when(sqlController.addUser(3L)).thenReturn(true);
+        Mockito.when(sqlController.addJoke(Mockito.anyString())).thenReturn(true);
+
+        Assert.assertEquals("- Здравствуйте. Меня зовут Оля, и я украла крокодила из зоопарка.- У нас общество анонимных алкоголиков...- А вы считаете, что я трезвая была?", logic.think("анекдот про крокодила", 3L).getAnswer());
     }
 
 }
