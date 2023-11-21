@@ -3,10 +3,7 @@ package ru.anekdots.databasecontroller.DB_Tables;
 import ru.anekdots.databasecontroller.SqlController;
 
 import java.io.Closeable;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class BaseTable implements Closeable {
     /**
@@ -19,9 +16,12 @@ public class BaseTable implements Closeable {
 
     BaseTable(String tableName) throws SQLException {
         this.tableName = tableName;
-        this.connection = SqlController.getConnection();
+        getConnection();
     }
 
+    void getConnection() throws SQLException {
+        connection = DriverManager.getConnection(SqlController.DB_URL);
+    }
 
     @Override
     public void close(){
@@ -40,7 +40,7 @@ public class BaseTable implements Closeable {
      */
     void reopenConnection() throws SQLException{
         if (connection == null || connection.isClosed()) {
-            connection = SqlController.getConnection();
+            getConnection();
         }
     }
 
