@@ -14,7 +14,7 @@ public class HtmlGetter {
 
         WebClient webClient = new WebClient(BrowserVersion.EDGE);
         webClient.getOptions().setJavaScriptEnabled(false); // Выключить js
-        webClient.waitForBackgroundJavaScript(1000); // important! wait until javascript finishes rendering
+        webClient.waitForBackgroundJavaScript(1000);
         HtmlPage page = webClient.getPage(url);
 
         String xPath = "/html/body/div[2]/div[4]/div[1]/div[1]/div[1]";
