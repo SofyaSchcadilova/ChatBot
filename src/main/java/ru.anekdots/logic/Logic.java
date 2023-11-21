@@ -1,4 +1,4 @@
-package ru.anekdots.bot;
+package ru.anekdots.logic;
 
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import com.vdurmont.emoji.EmojiParser;
@@ -7,7 +7,9 @@ import ru.anekdots.databasecontroller.SqlController;
 
 import ru.anekdots.databasecontroller.models.JokesModel;
 import ru.anekdots.databasecontroller.models.UserModel;
+import ru.anekdots.logic.HtmlGetter;
 import ru.anekdots.logic.LogicAnswer;
+import ru.anekdots.logic.WebSearch;
 import ru.anekdots.resourses.answers;
 
 import java.io.Closeable;

@@ -30,7 +30,6 @@ class WebSearchTest {
             "rt.ru/id/4213",
             "https://www.bruh.ru/id/-12412");
 
-    String url = "https://www.google.com/search?q=anekdot.ru+";
     @After
     public void afterClass() { System.out.println("Test finished " + testName.getMethodName());
     }
