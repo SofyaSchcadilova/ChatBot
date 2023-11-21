@@ -2,20 +2,20 @@ package ru.anekdots.bot;
 
 import com.vdurmont.emoji.EmojiParser;
 import org.junit.*;
-import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.rules.TestName;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.anekdots.databasecontroller.SqlController;
 import ru.anekdots.databasecontroller.models.JokesModel;
 import ru.anekdots.databasecontroller.models.UserModel;
-import ru.anekdots.logic.HtmlGetter;
-import ru.anekdots.logic.WebSearch;
+import ru.anekdots.logic.Logic;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalTime;
+import java.util.Set;
+import java.util.TreeSet;
 
 
 /**
@@ -55,7 +55,7 @@ public class LogicTest {
         Logic logic = new Logic(sqlController);
 
         logic.think("Предложить анекдот", 3L);
-        Assert.assertEquals("Анекдот добавлен!", logic.think(joke1, 3L).getAnswer());
+        Assert.assertEquals("Такой анекдот уже есть!", logic.think(joke1, 3L).getAnswer());
     }
     @Test
     public void thinkTest_SecondAttemptAddJoke() throws SQLException, IOException {
@@ -146,7 +146,6 @@ public class LogicTest {
         Mockito.when(sqlController.IsSeenJoke(3L, 1)).thenReturn(false);
         Mockito.when(sqlController.getRandomJoke()).thenReturn(joke1);
 
-        Logic logic = new Logic(sqlController);
         Assert.assertEquals( "анек1", logic.think("нужен анекдот", 3L).getAnswer());
     }
     /**
@@ -222,5 +221,4 @@ public class LogicTest {
         Assert.assertEquals("Спасибо за оценку!", logic.think(EmojiParser.parseToUnicode("\uD83D\uDC4D"), 3L).getAnswer());
     }
 
-    }
 }

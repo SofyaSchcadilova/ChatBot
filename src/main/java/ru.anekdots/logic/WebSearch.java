@@ -11,6 +11,7 @@ import org.htmlunit.html.DomNodeList;
 import org.htmlunit.html.HtmlPage;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,7 +28,6 @@ import java.util.regex.Pattern;
 public class WebSearch {
     String url; // ?????
 
-    private final String banned_chars = "[~#@*+%{}<>\\[\\]|\"\\_^]";
     WebClient webClient = null;
 
     public WebSearch(WebClient webClient){
@@ -36,16 +36,12 @@ public class WebSearch {
     private final String banned_chars = "[~#@*+%{}<>\\[\\]|\"\\_^]+";
 
     public WebSearch( ){
-        this.url = "https://www.google.com/search?q=anekdot.ru+";
+        this.url = "https://ya.ru/search/?text=anekdot.ru+";
     }
 
 
 
     public boolean isContainBannedChars(String request) {
-        Pattern pattern = Pattern.compile(banned_chars);
-        Matcher matcher = pattern.matcher(request);
-
-    private boolean isContainBannedChars(String request) {
         Pattern pattern = Pattern.compile(banned_chars);
         Matcher matcher = pattern.matcher(request);
         return matcher.find();
@@ -75,7 +71,6 @@ public class WebSearch {
         return ans;
 
 
-
     }
 
 
@@ -99,39 +94,19 @@ public class WebSearch {
 
         List<String> ans = new ArrayList<String>();
 
-        WebClient webClient = new WebClient(BrowserVersion.EDGE);
-        webClient.getOptions().setJavaScriptEnabled(true); // Включить js для корректного поиска
-        webClient.getOptions().setThrowExceptionOnScriptError(false); // Проигнорировать проблемы с js
-        webClient.waitForBackgroundJavaScript(3000); // подождать прогрузки
-        HtmlPage page = webClient.getPage(url+URLEncoder.encode(request,"UTF-8"));
+        List<String> elements = getRawLinks(request);
 
 
 
-        DomNodeList<DomElement> elements = page.getElementsByTagName("a");
-
-
-
-        for (DomElement el : elements) {
-            Pattern pattern = Pattern.compile("https:\\/\\/www\\.anekdot\\.ru\\/id\\/-?\\d+");
-            Matcher matcher = pattern.matcher(el.getAttribute("href"));
-            if (matcher.find()){
-                ans.add(el.getAttribute("href").substring(matcher.start(),matcher.end()));
-        if (isContainBannedChars(request)) {
-            return null;
-        }
-        List<String> ans = new ArrayList<String>();
-
-
-        List<String> list = getRawLinks(request);
-
-        for (String el : list) {
+        for (String el : elements) {
             Pattern pattern = Pattern.compile("https:\\/\\/www\\.anekdot\\.ru\\/id\\/-?\\d+");
             Matcher matcher = pattern.matcher(el);
-            if (matcher.find()){
-                ans.add(el.substring(matcher.start(),matcher.end()));
+            System.out.println(el);
+            if (matcher.find()) {
+                ans.add(el.substring(matcher.start(), matcher.end()));
             }
         }
+
         return ans;
     }
-
 }
