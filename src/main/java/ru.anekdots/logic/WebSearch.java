@@ -23,7 +23,11 @@ import java.util.regex.Pattern;
  */
 public class WebSearch {
     String url; // ?????
+    WebClient webClient = null;
 
+    public WebSearch(WebClient webClient){
+        this.webClient = webClient;
+    }
     private final String banned_chars = "[~#@*+%{}<>\\[\\]|\"\\_^]";
 
     public WebSearch( ){
@@ -55,8 +59,9 @@ public class WebSearch {
 
 
         List<String> ans = new ArrayList<String>();
-
-        WebClient webClient = new WebClient(BrowserVersion.EDGE);
+        if (webClient == null){
+            webClient = new WebClient(BrowserVersion.EDGE);
+        }
         webClient.getOptions().setJavaScriptEnabled(true); // Включить js для корректного поиска
         webClient.getOptions().setThrowExceptionOnScriptError(false); // Проигнорировать проблемы с js
         webClient.waitForBackgroundJavaScript(3000); // подождать прогрузки
