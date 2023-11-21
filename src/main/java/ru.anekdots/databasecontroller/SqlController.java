@@ -53,7 +53,7 @@ public class SqlController {
         userTable.close();
     }
 
-    public static Connection getConnection() throws SQLException{
+    public Connection getConnection() throws SQLException{
         return DriverManager.getConnection(DB_URL);
     }
     
