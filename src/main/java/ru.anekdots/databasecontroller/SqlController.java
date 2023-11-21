@@ -15,11 +15,11 @@ import java.util.List;
  *
  */
 public class SqlController {
-    static String ROOT = System.getProperty("user.dir");
-    public static final String DB_URL = "jdbc:h2:" + ROOT + "\\src\\main\\database\\curDB.h2";
-    public static final String DB_Driver = "org.h2.Driver";
-    static JokesTable jokesTable;
-    static UserTable userTable;
+
+    public static final String DB_URL = "jdbc:h2:" + System.getProperty("user.dir") + "\\src\\main\\database\\curDB.h2"; // то что по середине - ROOT
+    public final String DB_Driver = "org.h2.Driver";
+    JokesTable jokesTable;
+    UserTable userTable;
     java.sql.Connection connection;
     public SqlController() throws SQLException, ClassNotFoundException{
         System.out.println(DB_URL);
