@@ -8,8 +8,9 @@ public class botsdata {
      * Токен бота
      */
     final static public String TOKEN = System.getenv("TOKEN");
+
     /**
      * Имя бота
      */
-    final static public String NAME =  System.getenv("BOTNAME");
+    final static public String NAME =  System.getenv("BOTNAME");;
 }

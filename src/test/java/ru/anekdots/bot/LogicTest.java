@@ -11,9 +11,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ru.anekdots.databasecontroller.SqlController;
 import ru.anekdots.databasecontroller.models.JokesModel;
 import ru.anekdots.databasecontroller.models.UserModel;
+import ru.anekdots.logic.HtmlGetter;
+import ru.anekdots.logic.Logic;
+import ru.anekdots.logic.WebSearch;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -137,7 +142,7 @@ public class LogicTest {
 
         Mockito.when(sqlController.getUserByTelegramId(3L)).thenReturn(user);
         Mockito.when(sqlController.addUser(3L)).thenReturn(true);
-        Assert.assertEquals("Введите количество шуток", logic.think("/gettop", 3L).getAnswer());
+        Assert.assertEquals("Введи количество шуток", logic.think("/gettop", 3L).getAnswer());
         user.State = 3;
         Mockito.when(sqlController.getBestJokes(2)).thenReturn(joke4 + "\n" + joke3 + "\n");
         Assert.assertEquals(joke4 + "\n" + joke3 + "\n", logic.think("2", 3L).getAnswer());
@@ -157,7 +162,6 @@ public class LogicTest {
         logic.think(EmojiParser.parseToUnicode("\uD83D\uDC4D"), 3L).getAnswer();
         Mockito.doNothing().when(sqlController).changeRate(1, true);
         Assert.assertEquals("Спасибо за оценку!", logic.think(EmojiParser.parseToUnicode("\uD83D\uDC4D"), 3L).getAnswer());
-
-
     }
+
 }

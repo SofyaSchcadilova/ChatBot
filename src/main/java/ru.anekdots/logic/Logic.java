@@ -66,6 +66,7 @@ public class Logic implements Closeable {
         HtmlGetter htmlGetter = new HtmlGetter();
         String evaluationKeyboard = "evaluationKeyboard";
         String menuKeyboard = "menuKeyboard";
+        rawText = rawText.toLowerCase();
 
         if (!DB.IsUserExists(userId)){
             DB.addUser(userId);
@@ -87,6 +88,20 @@ public class Logic implements Closeable {
             }
         }
 
+        if (cur_user.State == 2) {
+            while (!rawText.equals(EmojiParser.parseToUnicode("\uD83D\uDC4D"))
+                    && !rawText.equals(EmojiParser.parseToUnicode("\uD83D\uDC4E")))
+                return new LogicAnswer(EmojiParser.parseToUnicode
+                        ("Пожалуйста, оцени анекдот"), evaluationKeyboard);
+            if (EmojiParser.parseToUnicode("\uD83D\uDC4D").equals(rawText))
+                DB.changeRate(cur_user.PrevJoke, true);
+            else if (EmojiParser.parseToUnicode("\uD83D\uDC4E").equals(rawText))
+                DB.changeRate(cur_user.PrevJoke, false);
+
+            DB.setState(cur_user.Telegram_id,0);
+            return new LogicAnswer("Спасибо за оценку!", menuKeyboard);
+        }
+
         if (cur_user.State == 3){
             try {
                 DB.setState(userId, 0);
@@ -95,24 +110,43 @@ public class Logic implements Closeable {
             }
             catch (NumberFormatException nfe)
             {
-                DB.setState(userId, 0);
-                return new LogicAnswer("В следующий раз введи число!", menuKeyboard);
+                return new LogicAnswer("Введи число!", menuKeyboard);
             }
         }
 
-       if (cur_user.State == 2) {
-           while (!rawText.equals(EmojiParser.parseToUnicode("\uD83D\uDC4D"))
-                   && !rawText.equals(EmojiParser.parseToUnicode("\uD83D\uDC4E")))
-               return new LogicAnswer(EmojiParser.parseToUnicode
-                       ("Пожалуйста, оцени анекдот"), evaluationKeyboard);
-           if (EmojiParser.parseToUnicode("\uD83D\uDC4D").equals(rawText))
-               DB.changeRate(cur_user.PrevJoke, true);
-           else if (EmojiParser.parseToUnicode("\uD83D\uDC4E").equals(rawText))
-               DB.changeRate(cur_user.PrevJoke, false);
+        if (cur_user.State == 4){
+            if (rawText.length() > 12 && rawText.substring(0, 12).equals("анекдот про ")) {
+                DB.setState(userId, 0);
+                List<String> jokes = webSearch.find(rawText.substring(12));
 
-           DB.setState(cur_user.Telegram_id,0);
-           return new LogicAnswer("Спасибо за оценку!", menuKeyboard);
-       }
+                if (jokes == null)
+                    return new LogicAnswer("Произошла какая-то ошибка:(\n Попробуй снова!",
+                            menuKeyboard);
+                else if (jokes.isEmpty())
+                    return new LogicAnswer("Пупупу... Анекдотов про "
+                            + rawText.substring(12) + " нет...", menuKeyboard);
+
+                for (String joke : jokes) {
+                    joke = htmlGetter.getHtml(joke);
+                    if (DB.addJoke(joke)) {
+                        DB.setSeenJoke(userId, DB.findJokeByText(joke));
+                        DB.savePrevJoke(userId, DB.findJokeByText(joke));
+                        DB.setState(userId, 2);
+                        return new LogicAnswer(joke, evaluationKeyboard);
+                    } else if (!DB.IsSeenJoke(userId, DB.findJokeByText(joke)) &&
+                            DB.getJokeById(DB.findJokeByText(joke)).rate > -5) {
+                        DB.setSeenJoke(userId, DB.findJokeByText(joke));
+                        DB.savePrevJoke(userId, DB.findJokeByText(joke));
+                        DB.setState(userId, 2);
+                        return new LogicAnswer(joke, evaluationKeyboard);
+                    }
+                }
+                return new LogicAnswer("Ты уже получил все анекдоты про " +
+                        rawText.substring(12) + "...", menuKeyboard);
+            }
+            else
+                return new LogicAnswer("Введи в формате \"анекдот про ...\"!", null);
+        }
 
 
 
@@ -146,24 +180,6 @@ public class Logic implements Closeable {
             }
         }
 
-        rawText = rawText.toLowerCase();
-
-        if (rawText.charAt(0) == 'а') {
-            String jokeAbout = "анекдот про ";
-            int numberToCheck = 1;
-            for (int i = 1; i < jokeAbout.length(); i++){
-                if (rawText.charAt(i) == jokeAbout.charAt(i)){
-                    numberToCheck += 1;
-                }
-            }
-            if (numberToCheck == jokeAbout.length()){
-                List<String> jokes = webSearch.find(rawText.substring(12));
-                for (String joke : jokes){
-                    logicAnswer = new LogicAnswer(htmlGetter.getHtml(joke), null);
-                    return logicAnswer;
-                }
-            }
-        }
 
         switch (rawText) {
             case ("/start"):
@@ -197,13 +213,18 @@ public class Logic implements Closeable {
                         }
                     }
                 }
+            case ("анекдот по теме"):
+                answer = "Введи про кого или про что хочешь получить анекдот в формате \"анекдот про ...\"";
+                logicAnswer = new LogicAnswer(answer, null);
+                DB.setState(userId, 4);
+                break;
             case ("/suggest"), ("предложить анекдот"):
                 DB.setState(userId, 1);
-                answer = "Введите анекдот";
+                answer = "Введи анекдот";
                 logicAnswer = new LogicAnswer(answer, null);
                 break;
             case ("/joketime"), ("время анекдота"):
-                answer = "Введите время, в которое я буду отправлять тебе анекдот, в формате hh:mm";
+                answer = "Введи время, в которое я буду отправлять тебе анекдот, в формате hh:mm";
                 logicAnswer = new LogicAnswer(answer, null);
                 break;
             case ("/getall"), ("все анекдоты"):
@@ -211,7 +232,7 @@ public class Logic implements Closeable {
                 logicAnswer = new LogicAnswer(answer, menuKeyboard);
                 break;
             case ("/gettop"), ("лучшие анекдоты"):
-                answer = "Введите количество шуток";
+                answer = "Введи количество шуток";
                 logicAnswer = new LogicAnswer(answer, null);
                 DB.setState(userId, 3);
                 break;

@@ -206,6 +206,7 @@ public class SqlController {
         return jokesTable.getRandomJoke();
     }
 
+
     /**
      * Сколько шуток в базе данных
      * @return
