@@ -1,6 +1,7 @@
-package ru.anekdots.bot;
+package ru.anekdots.logic;
 
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import ru.anekdots.bot.ReplyKeyboardMaker;
 
 /**
  * Класс ответов бота, содержащих определенные наборы кнопок

@@ -11,18 +11,23 @@ import java.util.List;
  * Методы класса реализуют наборы кнопок
  */
 public class ReplyKeyboardMaker {
+    /**
+     * @return реплай клавиатура с кнопками основного меню
+     */
     public ReplyKeyboardMarkup getMainMenuKeyboard(){
         KeyboardRow row1 = new KeyboardRow();
-        row1.add("нужна помощь");
         row1.add("нужен анекдот");
+        row1.add("анекдот по теме");
+        row1.add("предложить анекдот");
 
         KeyboardRow row2 = new KeyboardRow();
         row2.add("время анекдота");
-        row2.add("предложить анекдот");
+        row2.add("все анекдоты");
+        row2.add("лучшие анекдоты");
 
         KeyboardRow row3 = new KeyboardRow();
-        row3.add("все анекдоты");
-        row3.add("лучшие анекдоты");
+        row3.add("нужна помощь");
+
 
         List<KeyboardRow> keyboard = new ArrayList<>();
         keyboard.add(row1);
@@ -38,6 +43,10 @@ public class ReplyKeyboardMaker {
         return replyKeyboardMarkup;
     }
 
+    /**
+     *
+     * @return реплай клавиатура с кнопками оценки
+     */
     public ReplyKeyboardMarkup getEvaluationKeyboard(){
 
         KeyboardRow row = new KeyboardRow();

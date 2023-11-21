@@ -8,7 +8,6 @@ import ru.anekdots.databasecontroller.models.UserModel;
 
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -206,6 +205,7 @@ public class SqlController {
     public JokesModel getRandomJoke() throws SQLException {
         return jokesTable.getRandomJoke();
     }
+
 
     /**
      * Сколько шуток в базе данных
