@@ -18,6 +18,10 @@ public class JokesTable extends BaseTable implements TableOperations{
         super("Jokes");
     }
 
+    public JokesTable(String dbUrl) throws SQLException {
+        super("Jokes", dbUrl);
+    }
+
     @Override
     public void createTable() throws SQLException {
         super.executeSqlStatement("CREATE TABLE IF NOT EXISTS Jokes(" +
