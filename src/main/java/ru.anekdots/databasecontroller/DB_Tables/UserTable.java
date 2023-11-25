@@ -47,7 +47,7 @@ public class UserTable extends  BaseTable implements TableOperations{
     /**
      * Маски для байтов
      */
-    private static final byte[] BIT_FLAGS = { (byte) 1, (byte) 2, (byte) 4, (byte) 8, (byte) 16, (byte) 32,
+    private final byte[] BIT_FLAGS = { (byte) 1, (byte) 2, (byte) 4, (byte) 8, (byte) 16, (byte) 32,
             (byte) 64, (byte) 128 };
 
     /**
@@ -55,7 +55,7 @@ public class UserTable extends  BaseTable implements TableOperations{
      * @param input byte[]
      * @return
      */
-    private static ArrayList<Boolean> bytesToBooleanArray(byte[] input) {
+    private ArrayList<Boolean> bytesToBooleanArray(byte[] input) {
         ArrayList<Boolean> out = new ArrayList<Boolean>();
 
 

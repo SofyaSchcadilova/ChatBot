@@ -186,11 +186,11 @@ public class Logic implements Closeable {
 
         switch (rawText) {
             case ("/start"):
-                answer = answers._START;
+                answer = new answers()._START;
                 logicAnswer = new LogicAnswer(answer, menuKeyboard);
                 break;
             case ("/help"), ("нужна помощь"):
-                answer = answers._HELP;
+                answer = new answers()._HELP;
                 logicAnswer = new LogicAnswer(answer, menuKeyboard);
                 break;
             case ("/needjoke"), ("нужен анекдот"):
