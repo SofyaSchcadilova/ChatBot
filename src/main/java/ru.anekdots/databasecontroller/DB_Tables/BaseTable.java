@@ -10,7 +10,7 @@ public class BaseTable implements Closeable {
      * JDBC-соединение для работы с таблицей
      */
     Connection connection;
-
+    String DB_URL;
     Statement statement;
     String tableName;
 
@@ -18,9 +18,14 @@ public class BaseTable implements Closeable {
         this.tableName = tableName;
         getConnection();
     }
+    BaseTable(String tableName, String s) throws SQLException {
+        this.tableName = tableName;
+        this.DB_URL = s;
+        getConnection();
+    }
 
     void getConnection() throws SQLException {
-        connection = DriverManager.getConnection(SqlController.DB_URL);
+        connection = DriverManager.getConnection(DB_URL);
     }
 
     @Override

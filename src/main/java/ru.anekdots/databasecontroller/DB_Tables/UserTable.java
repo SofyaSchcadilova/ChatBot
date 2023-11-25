@@ -24,6 +24,9 @@ public class UserTable extends  BaseTable implements TableOperations{
     public UserTable() throws SQLException {
         super("UserTable");
     }
+    public UserTable(String dbUrl) throws SQLException {
+        super("UserTable", dbUrl);
+    }
 
     /**
      * Создать,если нет, таблицу

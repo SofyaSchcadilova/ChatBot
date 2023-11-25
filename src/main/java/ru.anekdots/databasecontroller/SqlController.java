@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class SqlController {
 
-    public static final String DB_URL = "jdbc:h2:" + System.getProperty("user.dir") + "\\src\\main\\database\\curDB.h2"; // то что по середине - ROOT
+    public final String DB_URL = "jdbc:h2:" + System.getProperty("user.dir") + "\\src\\main\\database\\curDB.h2"; // то что по середине - ROOT
     public final String DB_Driver = "org.h2.Driver";
     JokesTable jokesTable;
     UserTable userTable;
@@ -24,24 +24,10 @@ public class SqlController {
     public SqlController() throws SQLException, ClassNotFoundException{
         System.out.println(DB_URL);
         Class.forName(DB_Driver);
-        jokesTable = new JokesTable();
-        userTable = new UserTable();
+        jokesTable = new JokesTable(DB_URL);
+        userTable = new UserTable(DB_URL);
         createTables();
-        /*
-        try {
-            Class.forName(DB_Driver); //Проверяем наличие JDBC драйвера для работы с БД
-            connection = DriverManager.getConnection(DB_URL);//соединение с БД
-            System.out.println("Соединение с СУБД выполнено.");
 
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace(); // обработка ошибки  Class.forName
-            System.out.println("JDBC драйвер для СУБД не найден!");
-        } catch (SQLException e) {
-            e.printStackTrace(); // обработка ошибок  DriverManager.getConnection
-            System.out.println("Ошибка SQL !");
-        }
-        */
     }
 
     public void createTables() throws SQLException{
