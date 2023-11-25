@@ -30,11 +30,11 @@ public class TelegramBot extends TelegramLongPollingBot implements Bot{
     /**
      * Имя бота
      */
-    private String Botname = botsdata.NAME;
+    private String Botname = new botsdata().NAME;
     /**
      * Ключ/Токен бота
      */
-    private String Token = botsdata.TOKEN;
+    private String Token = new botsdata().TOKEN;
 
 
     public TelegramBot() throws SQLException, ClassNotFoundException, InterruptedException {

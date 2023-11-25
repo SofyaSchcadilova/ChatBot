@@ -27,7 +27,6 @@ public class SqlController {
         jokesTable = new JokesTable(DB_URL);
         userTable = new UserTable(DB_URL);
         createTables();
-
     }
 
     public void createTables() throws SQLException{
