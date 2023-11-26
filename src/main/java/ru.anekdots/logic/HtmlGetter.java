@@ -17,12 +17,7 @@ public class HtmlGetter {
         webClient.waitForBackgroundJavaScript(1000);
         HtmlPage page = webClient.getPage(url);
 
-        String xPath = "/html/body/div[2]/div[4]/div[1]/div[1]/div[1]";
-
-        DomElement element = page.getFirstByXPath(xPath);
-        String text = element.getTextContent();
-
-        return text;
+        return page.asXml().replaceFirst("<\\?xml version=\"1.0\" encoding=\"(.+)\"\\?>", "<!DOCTYPE html>");
     }
 
 }

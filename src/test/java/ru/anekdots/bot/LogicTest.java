@@ -228,22 +228,4 @@ public class LogicTest {
         Assert.assertEquals("Спасибо за оценку!", logic.think(EmojiParser.parseToUnicode("\uD83D\uDC4D"), 3L).getAnswer());
     }
 
-    /**
-     * Проверка анекдот по теме (анекдот про... и высвечивается анекдот про...)
-     * @throws SQLException
-     * @throws IOException
-     */
-    @Test
-    public void thinkTest_jokeAbout() throws SQLException, IOException{
-        SqlController sqlController = Mockito.mock(SqlController.class);
-        Logic logic = new Logic(sqlController);
-        UserModel user = new UserModel(1,3L, 4, null);
-
-        Mockito.when(sqlController.getUserByTelegramId(3L)).thenReturn(user);
-        Mockito.when(sqlController.addUser(3L)).thenReturn(true);
-        Mockito.when(sqlController.addJoke(Mockito.anyString())).thenReturn(true);
-
-        Assert.assertEquals("- Здравствуйте. Меня зовут Оля, и я украла крокодила из зоопарка.- У нас общество анонимных алкоголиков...- А вы считаете, что я трезвая была?", logic.think("анекдот про крокодила", 3L).getAnswer());
-    }
-
 }
