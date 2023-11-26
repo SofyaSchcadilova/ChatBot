@@ -67,6 +67,7 @@ public class Logic implements Closeable {
         LogicAnswer logicAnswer;
         WebSearch webSearch = new WebSearch();
         HtmlGetter htmlGetter = new HtmlGetter();
+        HtmlParser htmlParser = new HtmlParser();
         String evaluationKeyboard = "evaluationKeyboard";
         String menuKeyboard = "menuKeyboard";
         rawText = rawText.toLowerCase();
@@ -130,7 +131,7 @@ public class Logic implements Closeable {
                             + rawText.substring(12) + " нет...", menuKeyboard);
 
                 for (String joke : jokes) {
-                    joke = htmlGetter.getHtml(joke);
+                    joke = htmlParser.parseHtml(htmlGetter.getHtml(joke));
                     if (DB.addJoke(joke)) {
                         DB.setSeenJoke(userId, DB.findJokeByText(joke));
                         DB.savePrevJoke(userId, DB.findJokeByText(joke));
