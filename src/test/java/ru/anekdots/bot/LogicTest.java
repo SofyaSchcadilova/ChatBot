@@ -5,22 +5,27 @@ import org.htmlunit.WebClient;
 import org.junit.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.rules.TestName;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import ru.anekdots.databasecontroller.SqlController;
 import ru.anekdots.databasecontroller.models.JokesModel;
 import ru.anekdots.databasecontroller.models.UserModel;
-import ru.anekdots.logic.HtmlGetter;
-import ru.anekdots.logic.Logic;
-import ru.anekdots.logic.LogicAnswer;
-import ru.anekdots.logic.WebSearch;
+import ru.anekdots.logic.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+
+import static org.powermock.api.mockito.PowerMockito.when;
 
 
 /**
@@ -226,6 +231,18 @@ public class LogicTest {
         logic.think(EmojiParser.parseToUnicode("\uD83D\uDC4D"), 3L).getAnswer();
         Mockito.doNothing().when(sqlController).changeRate(1, true);
         Assert.assertEquals("Спасибо за оценку!", logic.think(EmojiParser.parseToUnicode("\uD83D\uDC4D"), 3L).getAnswer());
+    }
+
+    /**
+     * Проверка анекдот по теме (анекдот про... и высвечивается анекдот про...)
+     * @throws SQLException
+     * @throws IOException
+     */
+    @Test
+    public void thinkTest_jokeAbout() throws SQLException, IOException{
+        //todo
+        Assert.assertEquals("done", "not done");
+
     }
 
 }
