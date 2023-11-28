@@ -240,9 +240,33 @@ public class LogicTest {
      */
     @Test
     public void thinkTest_jokeAbout() throws SQLException, IOException{
-        //todo
-        Assert.assertEquals("done", "not done");
+        SqlController sqlController = Mockito.mock(SqlController.class);
+        WebSearch webSearch = Mockito.mock(WebSearch.class);
+        HtmlGetter htmlGetter = Mockito.mock(HtmlGetter.class);
+        HtmlParser htmlParser = Mockito.mock(HtmlParser.class);
 
+
+
+        UserModel user = new UserModel(1,3L, 4, null);
+
+        String mocked_str = "Mocked";
+
+        List<String> mocked_list = List.of(mocked_str);
+
+        Mockito.when(webSearch.find(Mockito.anyString())).thenReturn(mocked_list);
+        Mockito.when(htmlGetter.getHtml(Mockito.anyString())).thenReturn(mocked_str);
+        Mockito.when(htmlParser.parseHtml(Mockito.anyString())).thenReturn(mocked_str);
+
+
+
+        Mockito.when(sqlController.getUserByTelegramId(3L)).thenReturn(user);
+        Mockito.when(sqlController.addUser(3L)).thenReturn(true);
+        Mockito.when(sqlController.addJoke(Mockito.anyString())).thenReturn(true);
+
+
+        Logic logic = new Logic(null, sqlController, webSearch, htmlGetter, htmlParser);
+
+        Assert.assertEquals(mocked_str,logic.think("анекдот про mocked",user.Telegram_id).getAnswer());
     }
 
 }

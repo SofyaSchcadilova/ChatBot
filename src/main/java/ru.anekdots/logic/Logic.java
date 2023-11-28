@@ -78,9 +78,6 @@ public class Logic implements Closeable {
     public LogicAnswer think(String rawText, Long userId) throws SQLException, IOException {
         String answer;
         LogicAnswer logicAnswer;
-        WebSearch webSearch = new WebSearch();
-        HtmlGetter htmlGetter = new HtmlGetter();
-        HtmlParser htmlParser = new HtmlParser();
         String evaluationKeyboard = "evaluationKeyboard";
         String menuKeyboard = "menuKeyboard";
         rawText = rawText.toLowerCase();
