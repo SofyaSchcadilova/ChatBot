@@ -5,22 +5,27 @@ import org.htmlunit.WebClient;
 import org.junit.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.rules.TestName;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import ru.anekdots.databasecontroller.SqlController;
 import ru.anekdots.databasecontroller.models.JokesModel;
 import ru.anekdots.databasecontroller.models.UserModel;
-import ru.anekdots.logic.HtmlGetter;
-import ru.anekdots.logic.Logic;
-import ru.anekdots.logic.LogicAnswer;
-import ru.anekdots.logic.WebSearch;
+import ru.anekdots.logic.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+
+import static org.powermock.api.mockito.PowerMockito.when;
 
 
 /**
@@ -226,6 +231,42 @@ public class LogicTest {
         logic.think(EmojiParser.parseToUnicode("\uD83D\uDC4D"), 3L).getAnswer();
         Mockito.doNothing().when(sqlController).changeRate(1, true);
         Assert.assertEquals("Спасибо за оценку!", logic.think(EmojiParser.parseToUnicode("\uD83D\uDC4D"), 3L).getAnswer());
+    }
+
+    /**
+     * Проверка анекдот по теме (анекдот про... и высвечивается анекдот про...)
+     * @throws SQLException
+     * @throws IOException
+     */
+    @Test
+    public void thinkTest_jokeAbout() throws SQLException, IOException{
+        SqlController sqlController = Mockito.mock(SqlController.class);
+        WebSearch webSearch = Mockito.mock(WebSearch.class);
+        HtmlGetter htmlGetter = Mockito.mock(HtmlGetter.class);
+        HtmlParser htmlParser = Mockito.mock(HtmlParser.class);
+
+
+
+        UserModel user = new UserModel(1,3L, 4, null);
+
+        String mocked_str = "Mocked";
+
+        List<String> mocked_list = List.of(mocked_str);
+
+        Mockito.when(webSearch.find(Mockito.anyString())).thenReturn(mocked_list);
+        Mockito.when(htmlGetter.getHtml(Mockito.anyString())).thenReturn(mocked_str);
+        Mockito.when(htmlParser.parseHtml(Mockito.anyString())).thenReturn(mocked_str);
+
+
+
+        Mockito.when(sqlController.getUserByTelegramId(3L)).thenReturn(user);
+        Mockito.when(sqlController.addUser(3L)).thenReturn(true);
+        Mockito.when(sqlController.addJoke(Mockito.anyString())).thenReturn(true);
+
+
+        Logic logic = new Logic(null, sqlController, webSearch, htmlGetter, htmlParser);
+
+        Assert.assertEquals(mocked_str,logic.think("анекдот про mocked",user.Telegram_id).getAnswer());
     }
 
 }

@@ -38,24 +38,37 @@ public class Logic implements Closeable {
      */
     private SqlController DB;
 
+    private WebSearch webSearch;
 
+    private HtmlGetter htmlGetter;
+
+    private HtmlParser htmlParser;
 
 
     public Logic(SqlController sql){
-        DB = sql;
+        this(null, sql, new WebSearch(),new HtmlGetter(),new HtmlParser());
     }
 
 
     public Logic() throws SQLException, ClassNotFoundException {
-        DB = new SqlController();
+        this(null, new SqlController(), new WebSearch(),new HtmlGetter(),new HtmlParser());
     }
 
     public Logic(Bot bot) throws SQLException, ClassNotFoundException {
-        DB = new SqlController();
-        this.bot = bot;
+        this(bot, new SqlController(), new WebSearch(),new HtmlGetter(),new HtmlParser());
     }
 
-
+    /**
+     * Только для тестов
+     * @param bot
+     */
+    public Logic(Bot bot, SqlController sql, WebSearch webSearch, HtmlGetter htmlGetter, HtmlParser htmlParser){
+        this.bot = bot;
+        this.DB = sql;
+        this.webSearch = webSearch;
+        this.htmlGetter = htmlGetter;
+        this.htmlParser = htmlParser;
+    }
 
     /**
      * Обработка запроса пользователя
@@ -65,9 +78,6 @@ public class Logic implements Closeable {
     public LogicAnswer think(String rawText, Long userId) throws SQLException, IOException {
         String answer;
         LogicAnswer logicAnswer;
-        WebSearch webSearch = new WebSearch();
-        HtmlGetter htmlGetter = new HtmlGetter();
-        HtmlParser htmlParser = new HtmlParser();
         String evaluationKeyboard = "evaluationKeyboard";
         String menuKeyboard = "menuKeyboard";
         rawText = rawText.toLowerCase();
