@@ -8,6 +8,7 @@ import ru.anekdots.databasecontroller.models.UserModel;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,15 +44,30 @@ public class SqlController {
     }
     
     /**
+     * Добавить шутку в БД <b> И запомнить автора шутки, по его айди в базе данных</b>
+     *
+     * @param JokeText
+     *
+     * @return true если добавилась, false если такая шутка уже есть
+     *
+     * @throws SQLException
+     */
+    public boolean addJoke(String JokeText,int user_id) throws SQLException {
+        userTable.addedJoke(user_id);
+        return jokesTable.addJokes(JokeText , user_id);
+    }
+
+    /**
      * Добавить шутку в БД
      *
      * @param JokeText
+     *
      * @return true если добавилась, false если такая шутка уже есть
      *
      * @throws SQLException
      */
     public boolean addJoke(String JokeText) throws SQLException {
-        return jokesTable.addJokes(JokeText);
+        return jokesTable.addJokes(JokeText , -1);
     }
 
 
@@ -281,6 +297,31 @@ public class SqlController {
      * @throws SQLException
      */
     public void changeRate(int jokeId, boolean up) throws SQLException {
+        reCheckRating(getJokeById(jokeId).user_id);
         jokesTable.changeRate(jokeId,up);
     }
+
+
+    /**
+     * Получить лучших n шутников
+     * @param n Количество шутников
+     * @return
+     * @throws SQLException
+     */
+    public ArrayList<UserModel> getBestUsers(int n) throws SQLException {
+        return userTable.getBestUsers(n);
+    }
+
+    /**
+     * Перерасчитать рейтинг пользователя
+     *
+     * @param user_id
+     * @throws SQLException
+     */
+    public void reCheckRating(int user_id) throws SQLException {
+        int s = jokesTable.reCheckRating(user_id);
+        userTable.setUserRating(user_id,s);
+    }
+
+
 }

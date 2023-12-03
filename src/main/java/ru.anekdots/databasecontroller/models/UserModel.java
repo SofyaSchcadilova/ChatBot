@@ -18,6 +18,7 @@ public class UserModel extends BaseModel{
      */
     public ArrayList<Boolean> SeenJokes;
 
+    public int User_rating;
 
     /**
      * 0 - свободное состояние
@@ -28,6 +29,7 @@ public class UserModel extends BaseModel{
      */
     public int State;
 
+    public int count_of_jokes;
 
 
     /**
@@ -39,28 +41,30 @@ public class UserModel extends BaseModel{
      */
     public int Time;
     public UserModel(int id){
-        super(id);
+        this(id,-1, -1, null,-1,-1,-1,0);
     }
 
     public UserModel(int id, long Telegram_id){
-        super(id);
-        this.Telegram_id = Telegram_id;
+        this(id,Telegram_id, -1, null,-1,-1,-1,0);
     }
 
     public UserModel(int id, long Telegram_id,int state, ArrayList<Boolean> seen){
-        super(id);
-        this.Telegram_id = Telegram_id;
-        this.SeenJokes = seen;
-        this.State = state;
+        this(id,Telegram_id,state,seen,-1, -1, -1,0);
     }
 
     public UserModel(int id, long Telegram_id,int state, ArrayList<Boolean> seen, int PrevJoke, int Time){
+        this(id,Telegram_id,state,seen,PrevJoke, Time, -1,0);
+    }
+
+    public UserModel(int id, long Telegram_id,int state, ArrayList<Boolean> seen, int PrevJoke, int Time, int User_rating, int count_of_jokes){
         super(id);
         this.Telegram_id = Telegram_id;
         this.SeenJokes = seen;
         this.State = state;
         this.PrevJoke = PrevJoke;
         this.Time = Time;
+        this.User_rating = User_rating;
+        this.count_of_jokes = count_of_jokes;
     }
     @Override
     public boolean equals(Object obj){
