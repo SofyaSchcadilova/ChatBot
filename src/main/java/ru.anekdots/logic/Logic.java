@@ -90,7 +90,7 @@ public class Logic implements Closeable {
 
         if (cur_user.State == 1){
             try {
-                if (DB.addJoke(rawText)) {
+                if (DB.addJoke(rawText,DB.getUserByTelegramId(userId).getId())) {
                     DB.setState(userId, 0);
                     return new LogicAnswer("Анекдот добавлен!", menuKeyboard);
                 } else {

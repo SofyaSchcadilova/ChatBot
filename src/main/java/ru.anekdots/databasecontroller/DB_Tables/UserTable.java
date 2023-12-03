@@ -1,5 +1,6 @@
 package ru.anekdots.databasecontroller.DB_Tables;
 
+import ru.anekdots.databasecontroller.models.JokesModel;
 import ru.anekdots.databasecontroller.models.UserModel;
 
 import java.io.ByteArrayInputStream;
@@ -40,7 +41,9 @@ public class UserTable extends  BaseTable implements TableOperations{
                 "state INTEGER NOT NULL," +
                 "seenJokes BINARY(255)," +
                 "prevJoke INTEGER NOT NULL," +
-                "time INTEGER)","Создана таблица " + tableName);
+                "time INTEGER," +
+                "rating INTEGER DEFAULT 0," +
+                "jokecount INTEGER DEFAULT 0)","Создана таблица " + tableName);
 
     }
 
@@ -112,7 +115,9 @@ public class UserTable extends  BaseTable implements TableOperations{
                 rs.getInt("state"),
                 seen,
                 rs.getInt("prevJoke"),
-                rs.getInt("time"));
+                rs.getInt("time"),
+                rs.getInt("rating"),
+                rs.getInt("jokecount"));
         return ans;
     }
 
@@ -137,7 +142,9 @@ public class UserTable extends  BaseTable implements TableOperations{
                 rs.getInt("state"),
                 seen,
                 rs.getInt("prevJoke"),
-                rs.getInt("time"));
+                rs.getInt("time"),
+                rs.getInt("rating"),
+                rs.getInt("jokecount"));
         return ans;
     }
 
@@ -151,8 +158,8 @@ public class UserTable extends  BaseTable implements TableOperations{
      */
     public boolean addUser(long Telegram_id) throws SQLException, IOException {
         if (!IsUserExists(Telegram_id)) {
-            executeSqlStatement("INSERT INTO Users( telegram_id,state, prevJoke) " +
-                    "VALUES (" + Telegram_id + ", 0, -1)");
+            executeSqlStatement("INSERT INTO Users( telegram_id,state, prevJoke, rating) " +
+                    "VALUES (" + Telegram_id + ", 0, -1, 0)");
             byte[] bytes = new byte[255];
             Arrays.fill(bytes,(byte) 0);
 
@@ -201,7 +208,7 @@ public class UserTable extends  BaseTable implements TableOperations{
      * @throws SQLException
      * @throws IOException
      */
-    public boolean IsSeenJoke(long Telegram_id,int JokeId) throws SQLException, IOException {
+    public boolean IsSeenJoke(long Telegram_id, int JokeId) throws SQLException, IOException {
         ResultSet rs = executeSqlStatement("SELECT * FROM Users WHERE (telegram_id="+ Telegram_id +")");
         if (!rs.next()){
             return false;
@@ -286,7 +293,8 @@ public class UserTable extends  BaseTable implements TableOperations{
 
     /**
      * Получить всех пользователей из базы данных (Без их массива просмотренных шуток)
-     *
+     * <b>
+     * Без просмотренных шуток
      *
      * @return List[UserModel]
      * @throws SQLException
@@ -300,11 +308,63 @@ public class UserTable extends  BaseTable implements TableOperations{
                         rs.getInt("state"),
                         null,
                         rs.getInt("prevJoke"),
-                        rs.getInt("time")
+                        rs.getInt("time"),
+                        rs.getInt("rating"),
+                        rs.getInt("jokecount")
                         )
                     );
         }
         return ans;
     }
 
+    /**
+     * Получить лучших n шутников
+     * @param n Количество шутников
+     * @return
+     * @throws SQLException
+     */
+    public ArrayList<UserModel> getBestUsers(int n) throws SQLException {
+        ResultSet rs = executeSqlStatement("SELECT TOP " + n + " *  FROM Users\n ORDER BY rating DESC");
+        ArrayList<UserModel> ans = new ArrayList<UserModel>();
+        while (rs.next()){
+            ans.add(
+                    new UserModel(rs.getInt("id"),
+                            rs.getLong("telegram_id"),
+                            rs.getInt("state"),
+                            null,
+                            rs.getInt("prevJoke"),
+                            rs.getInt("time"),
+                            rs.getInt("rating"),
+                            rs.getInt("jokecount")
+                            )
+            );
+
+        }
+        return ans;
+    }
+    /**
+     * Установить время отправки анекдотов у пользователя
+     * @param user_id
+     * @param rating
+     * @return -1 - значит нет такого пользователя
+     * @throws SQLException
+     */
+    public void setUserRating(int user_id, int rating) throws SQLException {
+        ResultSet rs = executeSqlStatement("SELECT * FROM Users WHERE (id ="+ user_id +")");
+        if (rs.next()){
+            executeSqlStatement("UPDATE Users SET rating =" + String.valueOf(rating) + " WHERE id =" + user_id);
+        }
+    }
+
+    /**
+     * Добавлена шутка
+     * @param user_id
+     */
+    public void addedJoke(int user_id) throws SQLException {
+        ResultSet rs = executeSqlStatement("SELECT * FROM Users WHERE (id ="+ user_id +")");
+        if (rs.next()){
+            int count = rs.getInt("jokecount");
+            executeSqlStatement("UPDATE Users SET jokecount =" + String.valueOf(count) + " WHERE id =" + user_id);
+        }
+    }
 }
