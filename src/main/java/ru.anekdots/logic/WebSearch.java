@@ -36,7 +36,7 @@ public class WebSearch {
     private final String banned_chars = "[~#@*+%{}<>\\[\\]|\"\\_^]+";
 
     public WebSearch( ){
-        this.url = "https://ya.ru/search/?text=anekdot.ru+";
+        this.url = "https://www.google.com/search?q=anekdot.ru+";
     }
 
 
@@ -60,7 +60,7 @@ public class WebSearch {
         webClient.getOptions().setThrowExceptionOnScriptError(false); // Проигнорировать проблемы с js
         webClient.waitForBackgroundJavaScript(3000); // подождать прогрузки
         HtmlPage page = webClient.getPage(url + URLEncoder.encode(request, "UTF-8"));
-
+        webClient.reset();
 
         List<String> ans = new ArrayList<String>();
         Iterable<DomElement> dom = page.getElementsByTagName("a");

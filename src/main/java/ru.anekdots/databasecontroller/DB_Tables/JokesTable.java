@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 
 /**
@@ -26,8 +27,9 @@ public class JokesTable extends BaseTable implements TableOperations{
     public void createTable() throws SQLException {
         super.executeSqlStatement("CREATE TABLE IF NOT EXISTS Jokes(" +
                 "id BIGINT AUTO_INCREMENT PRIMARY KEY," +
-                "jokesText VARCHAR(1023) NOT NULL," +
-                "rate INTEGER NOT NULL)","Создана таблица " + tableName);
+                "jokesText VARCHAR(2047) NOT NULL," +
+                "rate INTEGER NOT NULL," +
+                "user_id BIGINT DEFAULT -1)","Создана таблица " + tableName);
     }
 
     /**
@@ -59,7 +61,8 @@ public class JokesTable extends BaseTable implements TableOperations{
 
         return new JokesModel(rs.getInt("id"),
                 rs.getString("jokesText"),
-                rs.getInt("rate"));
+                rs.getInt("rate"),
+                rs.getInt("user_id"));
     }
 
     /**
@@ -90,7 +93,8 @@ public class JokesTable extends BaseTable implements TableOperations{
         while (rs.next()){
             ans.add(new JokesModel(rs.getInt("id"),
                     rs.getString("jokesText"),
-                    rs.getInt("rate")));
+                    rs.getInt("rate"),
+                    rs.getInt("user_id")));
         }
         return ans;
     }
@@ -106,7 +110,8 @@ public class JokesTable extends BaseTable implements TableOperations{
         while (rs.next()){
             ans.add(new JokesModel(rs.getInt("id"),
                     rs.getString("jokesText"),
-                    rs.getInt("rate")));
+                    rs.getInt("rate"),
+                    rs.getInt("user_id")));
         }
         return ans;
     }
@@ -115,14 +120,15 @@ public class JokesTable extends BaseTable implements TableOperations{
      * Добавить шутку в БД
      *
      * @param text
+     * @param user_id - айди пользователя в базе данных, -1 если нет такого
      * @return true если добавилась, false если такая шутка уже есть
      *
      * @throws SQLException
      */
-    public boolean addJokes(String text) throws  SQLException{
+    public boolean addJokes(String text, long user_id) throws  SQLException{
         if (find(text)==-1) {
-            executeSqlStatement("INSERT INTO Jokes(jokesText, rate) " +
-                    "VALUES ('" + text + "', 0)");
+            executeSqlStatement("INSERT INTO Jokes(jokesText, rate, user_id) " +
+                    "VALUES ('" + text + "', 0,  "+ String.valueOf(user_id) +")");
             return true;
         }
         else {
@@ -149,6 +155,21 @@ public class JokesTable extends BaseTable implements TableOperations{
     }
 
     /**
+     * Перерасчитать рейтинг пользователя
+     * @param user_id
+     * @throws SQLException
+     */
+    public int reCheckRating(int user_id) throws SQLException {
+        ResultSet rs = executeSqlStatement("SELECT TOP 3 * FROM Jokes WHERE (user_id= "+String.valueOf(user_id)+") ORDER BY rate DESC");
+        int sum = 0;
+
+        while (rs.next()){
+            sum += rs.getInt("rate");
+        }
+        return sum;
+    }
+
+    /**
      * Получить лучшие n шуток
      * @param n Количество шуток
      * @return
@@ -172,6 +193,8 @@ public class JokesTable extends BaseTable implements TableOperations{
     public void createForeignKey() throws SQLException{
 
     }
+
+
 
     /**
      * Получить случайную шутку из Базы данных
