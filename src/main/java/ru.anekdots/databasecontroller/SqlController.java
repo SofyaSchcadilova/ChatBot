@@ -284,6 +284,16 @@ public class SqlController {
     }
 
     /**
+     * Изменение количества шуток у пользователя
+     * @param telegram_id
+     * @param jokecount
+     * @throws SQLException
+     */
+    public void changeCountOfJokes(long telegram_id, int jokecount) throws SQLException {
+        userTable.changeCountOfJokes(telegram_id, jokecount);
+    }
+
+    /**
      * {@link UserTable#getAllUsers()}
      */
     public List<UserModel> getAllUsers() throws SQLException {

@@ -26,6 +26,7 @@ public class UserModel extends BaseModel{
      * 2 - ожидание оценки(необязательно состояние)
      * 3 - ожидание количества шуток n
      * 4 - ожидание темы анекдота
+     * 5 - ожидание количества топа пользователей n
      */
     public int State;
 
@@ -40,20 +41,24 @@ public class UserModel extends BaseModel{
      * Время в сек от начала дня, когда отправлять шутку пользователю
      */
     public int Time;
+    /**
+     * Имя пользователя
+     */
+    public String name;
     public UserModel(int id){
-        this(id,-1, -1, null,-1,-1,-1,0);
+        this(id,-1, -1, null,-1,-1,0, 0);
     }
 
     public UserModel(int id, long Telegram_id){
-        this(id,Telegram_id, -1, null,-1,-1,-1,0);
+        this(id,Telegram_id, -1, null,-1,-1,0, 0);
     }
 
     public UserModel(int id, long Telegram_id,int state, ArrayList<Boolean> seen){
-        this(id,Telegram_id,state,seen,-1, -1, -1,0);
+        this(id,Telegram_id,state,seen,-1, -1, 0, 0);
     }
 
     public UserModel(int id, long Telegram_id,int state, ArrayList<Boolean> seen, int PrevJoke, int Time){
-        this(id,Telegram_id,state,seen,PrevJoke, Time, -1,0);
+        this(id,Telegram_id,state,seen,PrevJoke, Time, 0,0);
     }
 
     public UserModel(int id, long Telegram_id,int state, ArrayList<Boolean> seen, int PrevJoke, int Time, int User_rating, int count_of_jokes){
