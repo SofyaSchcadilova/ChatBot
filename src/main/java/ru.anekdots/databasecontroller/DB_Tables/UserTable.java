@@ -292,6 +292,20 @@ public class UserTable extends  BaseTable implements TableOperations{
     }
 
     /**
+     * Изменение количества шуток у пользователя
+     * @param telegram_id
+     * @param jokecount
+     * @throws SQLException
+     */
+    public void changeCountOfJokes(long telegram_id, int jokecount) throws SQLException {
+        if (!IsUserExists(telegram_id)) {
+            throw new SQLException("Нет такого пользователя");
+        }
+        executeSqlStatement("UPDATE Users SET jokecount =" + String.valueOf(jokecount + 1) + " WHERE telegram_id =" + telegram_id);
+    }
+
+
+    /**
      * Получить всех пользователей из базы данных (Без их массива просмотренных шуток)
      * <b>
      * Без просмотренных шуток

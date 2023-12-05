@@ -26,8 +26,9 @@ public class ReplyKeyboardMaker {
         row2.add("лучшие анекдоты");
 
         KeyboardRow row3 = new KeyboardRow();
+        row3.add("статистика");
+        row3.add("топ шутников");
         row3.add("нужна помощь");
-
 
         List<KeyboardRow> keyboard = new ArrayList<>();
         keyboard.add(row1);

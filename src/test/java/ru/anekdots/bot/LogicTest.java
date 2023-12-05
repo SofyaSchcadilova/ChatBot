@@ -213,7 +213,7 @@ public class LogicTest {
     }
 
     /**
-     * Пользователь ставит оценку пользователю
+     * Пользователь ставит оценку анекдоту
      * @throws SQLException
      * @throws IOException
      */
@@ -231,6 +231,29 @@ public class LogicTest {
         logic.think(EmojiParser.parseToUnicode("\uD83D\uDC4D"), 3L).getAnswer();
         Mockito.doNothing().when(sqlController).changeRate(1, true);
         Assert.assertEquals("Спасибо за оценку!", logic.think(EmojiParser.parseToUnicode("\uD83D\uDC4D"), 3L).getAnswer());
+    }
+
+    /**
+     * Проверка статистики пользователя
+     * @throws SQLException
+     * @throws IOException
+     */
+    @Test
+    public void thinkTest_getStatistic() throws SQLException, IOException{
+        SqlController sqlController = Mockito.mock(SqlController.class);
+        Logic logic = new Logic(sqlController);
+        UserModel user = new UserModel(1, 3L, 0, null, -1, -1, 26, 4);
+        JokesModel joke1 = new JokesModel(1, "анек1", 17, 1);
+        JokesModel joke2 = new JokesModel(2, "анек2", 3, 1);
+        JokesModel joke3 = new JokesModel(3, "анек3", 6, 1);
+        JokesModel joke4 = new JokesModel(4, "анек4", -7, 1);
+
+        Mockito.when(sqlController.getUserByTelegramId(3L)).thenReturn(user);
+        Mockito.when(sqlController.addUser(3L)).thenReturn(true);
+
+        Mockito.when(sqlController.addJoke(Mockito.anyString())).thenReturn(true);
+
+        Assert.assertEquals("Ты предложил 4 анекдота\nТвои лучшие анекдоты в сумме набрали 26", logic.think("статистика", 3L).getAnswer());
     }
 
     /**

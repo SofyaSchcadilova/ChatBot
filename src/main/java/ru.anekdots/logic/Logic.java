@@ -88,10 +88,12 @@ public class Logic implements Closeable {
         }
         UserModel cur_user = DB.getUserByTelegramId(userId);
 
+
         if (cur_user.State == 1){
             try {
                 if (DB.addJoke(rawText,DB.getUserByTelegramId(userId).getId())) {
                     DB.setState(userId, 0);
+                    DB.changeCountOfJokes(userId, DB.getUserByTelegramId(userId).count_of_jokes);
                     return new LogicAnswer("Анекдот добавлен!", menuKeyboard);
                 } else {
                     DB.setState(userId, 0);
@@ -160,6 +162,33 @@ public class Logic implements Closeable {
             }
             else
                 return new LogicAnswer("Введи в формате \"анекдот про ...\"!", null);
+        }
+
+        if (cur_user.State == 5){
+            try {
+                int n = Integer.parseInt(rawText);
+                if (n > 10 || n < 1)
+                    return new LogicAnswer("Введи число от 1 до 10", null);
+                DB.setState(userId, 0);
+                if (n > DB.getBestUsers(n).size()){
+                    answer = "У нас пока только " + Integer.toString(n) + " лучших пользователей\n";
+                    for (int i = 0; i < DB.getBestUsers(n).size(); i++){
+                        Long name = DB.getBestUsers(n).get(i).Telegram_id;
+
+                        //answer += Long.toString()
+                    }
+                }
+                for (int i = 0; i < DB.getBestUsers(n).size(); i++){
+                    //answer += DB.getBestUsers(n)
+                }
+                answer = String.valueOf(DB.getBestUsers(n));
+
+                return new LogicAnswer(answer, menuKeyboard);
+            }
+            catch (NumberFormatException nfe)
+            {
+                return new LogicAnswer("Введи число!", null);
+            }
         }
 
 
@@ -250,7 +279,24 @@ public class Logic implements Closeable {
                 logicAnswer = new LogicAnswer(answer, null);
                 DB.setState(userId, 3);
                 break;
-
+            case ("топ шутников"):
+                answer = "Введи число от 1 до 10";
+                logicAnswer = new LogicAnswer(answer, null);
+                DB.setState(userId, 5);
+                break;
+            case ("статистика"):
+                int count = DB.getUserByTelegramId(userId).count_of_jokes;
+                answer = "Ты предложил " + Integer.toString(count);
+                if (count % 10 == 1 && count % 100 != 11)
+                    answer += " анекдот\n";
+                else if ((count % 10 == 2 || count % 10 == 3 || count % 10 == 4 ) &&
+                        (count % 100 != 12 || count % 100 != 13 || count % 100 != 14))
+                    answer += " анекдота\n";
+                else
+                    answer += " анекдотов\n";
+                answer += "Твои лучшие анекдоты в сумме набрали " + Integer.toString(DB.getUserByTelegramId(userId).User_rating);
+                logicAnswer = new LogicAnswer(answer, menuKeyboard);
+                break;
             default:
                 answer = "Я не знаю такую команду :(\nВведи /help для справки";
                 logicAnswer = new LogicAnswer(answer, menuKeyboard);
