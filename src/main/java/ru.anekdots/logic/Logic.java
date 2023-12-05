@@ -113,8 +113,6 @@ public class Logic implements Closeable {
 
     public LogicAnswer think(String rawText, Long userId) throws SQLException, IOException {
 
-        System.out.println(getTelegramName(userId));
-
         String answer;
         LogicAnswer logicAnswer;
         String evaluationKeyboard = "evaluationKeyboard";
@@ -358,8 +356,6 @@ public class Logic implements Closeable {
 
         try {
             HttpPost post = new HttpPost("https://api.telegram.org/bot"+ bot.getBotToken()+"/getChat");
-
-            // add request parameter, form parameters
             List<NameValuePair> urlParameters = new ArrayList<>();
             urlParameters.add(new BasicNameValuePair("chat_id", String.valueOf(chat_id)));
 
@@ -369,7 +365,7 @@ public class Logic implements Closeable {
                  CloseableHttpResponse response = httpClient.execute(post)) {
                 String raw = EntityUtils.toString(response.getEntity());
                 JSONObject object = new JSONObject(raw).getJSONObject("result");
-                return object.getString("username");
+                return object.getString("first_name");
             }
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
