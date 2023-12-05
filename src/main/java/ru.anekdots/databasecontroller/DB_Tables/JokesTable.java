@@ -27,7 +27,7 @@ public class JokesTable extends BaseTable implements TableOperations{
     public void createTable() throws SQLException {
         super.executeSqlStatement("CREATE TABLE IF NOT EXISTS Jokes(" +
                 "id BIGINT AUTO_INCREMENT PRIMARY KEY," +
-                "jokesText VARCHAR(1023) NOT NULL," +
+                "jokesText VARCHAR(2047) NOT NULL," +
                 "rate INTEGER NOT NULL," +
                 "user_id BIGINT DEFAULT -1)","Создана таблица " + tableName);
     }

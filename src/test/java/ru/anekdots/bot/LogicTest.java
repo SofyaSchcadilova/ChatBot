@@ -61,7 +61,7 @@ public class LogicTest {
         UserModel user = new UserModel(1,3L, 1, null);
         Mockito.when(sqlController.IsUserExists(3L)).thenReturn(true);
         Mockito.when(sqlController.getUserByTelegramId(3L)).thenReturn(user);
-        Mockito.when(sqlController.addJoke(Mockito.anyString())).thenReturn(true);
+        Mockito.when(sqlController.addJoke(Mockito.anyString(), Mockito.anyInt())).thenReturn(true);
         Mockito.when(sqlController.addUser(3L)).thenReturn(false);
 
         Logic logic = new Logic(sqlController);

@@ -113,8 +113,6 @@ public class Logic implements Closeable {
 
     public LogicAnswer think(String rawText, Long userId) throws SQLException, IOException {
 
-        System.out.println(getTelegramName(userId));
-
         String answer;
         LogicAnswer logicAnswer;
         String evaluationKeyboard = "evaluationKeyboard";

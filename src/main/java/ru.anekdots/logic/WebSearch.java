@@ -36,7 +36,7 @@ public class WebSearch {
     private final String banned_chars = "[~#@*+%{}<>\\[\\]|\"\\_^]+";
 
     public WebSearch( ){
-        this.url = "https://ya.ru/search/?text=anekdot.ru+";
+        this.url = "https://www.google.com/search?q=anekdot.ru+";
     }
 
 
