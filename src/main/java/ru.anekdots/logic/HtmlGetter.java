@@ -16,7 +16,7 @@ public class HtmlGetter {
         webClient.getOptions().setJavaScriptEnabled(false); // Выключить js
         webClient.waitForBackgroundJavaScript(1000);
         HtmlPage page = webClient.getPage(url);
-
+        webClient.close();
         return page.asXml().replaceFirst("<\\?xml version=\"1.0\" encoding=\"(.+)\"\\?>", "<!DOCTYPE html>");
     }
 
