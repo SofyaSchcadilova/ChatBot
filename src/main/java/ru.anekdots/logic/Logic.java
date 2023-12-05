@@ -1,5 +1,18 @@
 package ru.anekdots.logic;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import com.vdurmont.emoji.EmojiParser;
 import ru.anekdots.bot.Bot;
@@ -14,17 +27,27 @@ import ru.anekdots.resourses.answers;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.sql.SQLException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.time.LocalTime;
 import java.time.Duration;
 import java.time.format.DateTimeFormatter;
+import java.util.stream.Collectors;
 
 /**
  * Основной класс логики
@@ -76,6 +99,9 @@ public class Logic implements Closeable {
       */
 
     public LogicAnswer think(String rawText, Long userId) throws SQLException, IOException {
+
+        System.out.println(getTelegramName(userId));
+
         String answer;
         LogicAnswer logicAnswer;
         String evaluationKeyboard = "evaluationKeyboard";
@@ -265,5 +291,32 @@ public class Logic implements Closeable {
 
     public void close(){
         DB.close();
+    }
+
+
+    public String getTelegramName(long chat_id)  {
+
+        try {
+            HttpPost post = new HttpPost("https://api.telegram.org/bot"+ bot.getBotToken()+"/getChat");
+
+            // add request parameter, form parameters
+            List<NameValuePair> urlParameters = new ArrayList<>();
+            urlParameters.add(new BasicNameValuePair("chat_id", String.valueOf(chat_id)));
+
+            post.setEntity(new UrlEncodedFormEntity(urlParameters));
+
+            try (CloseableHttpClient httpClient = HttpClients.createDefault();
+                 CloseableHttpResponse response = httpClient.execute(post)) {
+                String raw = EntityUtils.toString(response.getEntity());
+                JSONObject object = new JSONObject(raw).getJSONObject("result");
+                return object.getString("username");
+            }
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        } catch (ClientProtocolException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
