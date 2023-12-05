@@ -21,6 +21,7 @@ import ru.anekdots.logic.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -251,11 +252,11 @@ public class LogicTest {
         Mockito.when(sqlController.getUserByTelegramId(3L)).thenReturn(user);
         Mockito.when(sqlController.addUser(3L)).thenReturn(true);
 
+        Assert.assertEquals("Введи количество шуток", logic.think("/gettop", 3L).getAnswer());
         Mockito.when(sqlController.addJoke(Mockito.anyString())).thenReturn(true);
 
         Assert.assertEquals("Ты предложил 4 анекдота\nТвои лучшие анекдоты в сумме набрали 26", logic.think("статистика", 3L).getAnswer());
     }
-
     /**
      * Проверка анекдот по теме (анекдот про... и высвечивается анекдот про...)
      * @throws SQLException

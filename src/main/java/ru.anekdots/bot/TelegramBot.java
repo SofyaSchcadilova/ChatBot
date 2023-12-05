@@ -1,6 +1,7 @@
 package ru.anekdots.bot;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChat;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
@@ -93,7 +94,6 @@ public class TelegramBot extends TelegramLongPollingBot implements Bot{
             throw new RuntimeException(e);
         }
     }
-
 
     public class ThreadForEverydayJoke implements Runnable{
 

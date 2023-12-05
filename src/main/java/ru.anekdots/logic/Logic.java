@@ -1,4 +1,17 @@
 package ru.anekdots.logic;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import com.vdurmont.emoji.EmojiParser;
@@ -14,10 +27,16 @@ import ru.anekdots.resourses.answers;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.sql.SQLException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -113,7 +132,6 @@ public class Logic implements Closeable {
                 DB.changeRate(cur_user.PrevJoke, true);
             else if (EmojiParser.parseToUnicode("\uD83D\uDC4E").equals(rawText))
                 DB.changeRate(cur_user.PrevJoke, false);
-
             DB.setState(cur_user.Telegram_id,0);
             return new LogicAnswer("Спасибо за оценку!", menuKeyboard);
         }
@@ -171,18 +189,21 @@ public class Logic implements Closeable {
                     return new LogicAnswer("Введи число от 1 до 10", null);
                 DB.setState(userId, 0);
                 if (n > DB.getBestUsers(n).size()){
-                    answer = "У нас пока только " + Integer.toString(n) + " лучших пользователей\n";
+                    answer = "У нас пока только " + Integer.toString(DB.getBestUsers(n).size()) + " лучших пользователей\n";
                     for (int i = 0; i < DB.getBestUsers(n).size(); i++){
-                        Long name = DB.getBestUsers(n).get(i).Telegram_id;
-
-                        //answer += Long.toString()
+                        String name = getTelegramName(DB.getBestUsers(n).get(i).Telegram_id);
+                        answer += name + "   ";
+                        answer += Integer.toString(DB.getBestUsers(n).get(i).User_rating) + "\n";
                     }
                 }
-                for (int i = 0; i < DB.getBestUsers(n).size(); i++){
-                    //answer += DB.getBestUsers(n)
+                else{
+                    answer = "";
+                    for (int i = 0; i < n; i++){
+                        String name = getTelegramName(DB.getBestUsers(n).get(i).Telegram_id);
+                        answer += name + "   ";
+                        answer += Integer.toString(DB.getBestUsers(n).get(i).User_rating) + "\n";
+                    }
                 }
-                answer = String.valueOf(DB.getBestUsers(n));
-
                 return new LogicAnswer(answer, menuKeyboard);
             }
             catch (NumberFormatException nfe)
@@ -311,5 +332,30 @@ public class Logic implements Closeable {
 
     public void close(){
         DB.close();
+    }
+    public String getTelegramName(long chat_id)  {
+
+        try {
+            HttpPost post = new HttpPost("https://api.telegram.org/bot"+ bot.getBotToken()+"/getChat");
+
+            // add request parameter, form parameters
+            List<NameValuePair> urlParameters = new ArrayList<>();
+            urlParameters.add(new BasicNameValuePair("chat_id", String.valueOf(chat_id)));
+
+            post.setEntity(new UrlEncodedFormEntity(urlParameters));
+
+            try (CloseableHttpClient httpClient = HttpClients.createDefault();
+                 CloseableHttpResponse response = httpClient.execute(post)) {
+                String raw = EntityUtils.toString(response.getEntity());
+                JSONObject object = new JSONObject(raw).getJSONObject("result");
+                return object.getString("username");
+            }
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        } catch (ClientProtocolException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
