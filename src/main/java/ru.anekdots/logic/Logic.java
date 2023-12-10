@@ -64,7 +64,7 @@ import java.util.stream.Collectors;
 
 /**
  * Основной класс логики
-  */
+ */
 public class Logic implements Closeable {
 
 
@@ -109,7 +109,7 @@ public class Logic implements Closeable {
     /**
      * Обработка запроса пользователя
      * @param rawText "сырой" текст
-      */
+     */
 
     public LogicAnswer think(String rawText, Long userId) throws SQLException, IOException {
 
@@ -117,7 +117,6 @@ public class Logic implements Closeable {
         LogicAnswer logicAnswer;
         String evaluationKeyboard = "evaluationKeyboard";
         String menuKeyboard = "menuKeyboard";
-        rawText = rawText.toLowerCase();
 
         if (!DB.IsUserExists(userId)){
             DB.addUser(userId);
@@ -165,6 +164,8 @@ public class Logic implements Closeable {
                 return new LogicAnswer("Введи число!", menuKeyboard);
             }
         }
+
+        rawText = rawText.toLowerCase();
 
         if (cur_user.State == 4){
             if (rawText.length() > 12 && rawText.substring(0, 12).equals("анекдот про ")) {
@@ -254,7 +255,7 @@ public class Logic implements Closeable {
                     Duration duration = Duration.between(midnight, timeForJoke);
                     int secondsSinceStartOfDay = (int) duration.getSeconds();
                     DB.setUserTime(userId, secondsSinceStartOfDay);
-                    return new LogicAnswer("Хорошо! Жди анекдот в " + rawText, menuKeyboard);
+                    return new LogicAnswer("Хорошо! Жди анекдот в " + rawText + " (по гринвичу)", menuKeyboard);
                 }
                 return new LogicAnswer("Введи время в формате hh:mm", menuKeyboard);
             } catch (ParseException e) {
@@ -306,7 +307,7 @@ public class Logic implements Closeable {
                 logicAnswer = new LogicAnswer(answer, null);
                 break;
             case ("/joketime"), ("время анекдота"):
-                answer = "Введи время, в которое я буду отправлять тебе анекдот, в формате hh:mm";
+                answer = "Введи время (по гринвичу), в которое я буду отправлять тебе анекдот, в формате hh:mm";
                 logicAnswer = new LogicAnswer(answer, null);
                 break;
             case ("/getall"), ("все анекдоты"):
@@ -340,7 +341,7 @@ public class Logic implements Closeable {
                 answer = "Я не знаю такую команду :(\nВведи /help для справки";
                 logicAnswer = new LogicAnswer(answer, menuKeyboard);
                 break;
-            }
+        }
         return logicAnswer;
     }
 

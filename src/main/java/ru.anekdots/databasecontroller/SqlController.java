@@ -307,8 +307,8 @@ public class SqlController {
      * @throws SQLException
      */
     public void changeRate(int jokeId, boolean up) throws SQLException {
-        reCheckRating(getJokeById(jokeId).user_id);
         jokesTable.changeRate(jokeId,up);
+        reCheckRating(getJokeById(jokeId).user_id);
     }
 
 
