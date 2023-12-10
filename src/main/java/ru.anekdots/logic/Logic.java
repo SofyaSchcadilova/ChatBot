@@ -255,7 +255,7 @@ public class Logic implements Closeable {
                     Duration duration = Duration.between(midnight, timeForJoke);
                     int secondsSinceStartOfDay = (int) duration.getSeconds();
                     DB.setUserTime(userId, secondsSinceStartOfDay);
-                    return new LogicAnswer("Хорошо! Жди анекдот в " + rawText + " \n(по гринвичу)", menuKeyboard);
+                    return new LogicAnswer("Хорошо! Жди анекдот в " + rawText + " (по гринвичу)", menuKeyboard);
                 }
                 return new LogicAnswer("Введи время в формате hh:mm", menuKeyboard);
             } catch (ParseException e) {
