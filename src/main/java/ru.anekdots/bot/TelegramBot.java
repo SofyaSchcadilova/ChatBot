@@ -10,7 +10,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.anekdots.databasecontroller.models.UserModel;
 import ru.anekdots.logic.Logic;
 import ru.anekdots.logic.LogicAnswer;
-import ru.anekdots.resourses.botsdata;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -33,11 +32,11 @@ public class TelegramBot extends TelegramLongPollingBot implements Bot{
     /**
      * Имя бота
      */
-    final private String Botname = dotenv.get("TOKEN");
+    final private String Botname = dotenv.get("NAME");
     /**
      * Ключ/Токен бота
      */
-    final private String Token = dotenv.get("NAME");
+    final private String Token = dotenv.get("TOKEN");
 
 
     public TelegramBot() throws SQLException, ClassNotFoundException, InterruptedException {
